@@ -18,7 +18,7 @@ Simplifier la gestion financière des entreprises clientes du cabinet "Expertise
 
 ## 🛠️ Stack technique
 
-* Backend : Python Django
+* Backend : Python FastAPI
 * Base de données : PostgreSQL
 * Frontend : JavaScript
 * Conteneurisation : Docker

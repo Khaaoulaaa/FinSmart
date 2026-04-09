@@ -31,7 +31,7 @@
 - Plan de déploiement et tarification SaaS
 
 ## 5. Stack technique
-- Backend : Python Django
+- Backend : Python FastAPI
 - Base de données : PostgreSQL
 - Frontend : React 
 - Conteneurisation : Docker
