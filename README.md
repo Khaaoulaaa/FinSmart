@@ -20,7 +20,7 @@ Simplifier la gestion financière des entreprises clientes du cabinet "Expertise
 
 * Backend : Python FastAPI
 * Base de données : PostgreSQL
-* Frontend : JavaScript
+* Frontend : JavaScript ( React )
 * Conteneurisation : Docker
 * CI/CD : GitHub Actions
 * OS : Linux
