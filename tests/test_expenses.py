@@ -3,10 +3,10 @@ import os
 os.environ["DATABASE_URL"] = "sqlite+pysqlite:///:memory:"
 os.environ["ENVIRONMENT"] = "test"
 
-from fastapi.testclient import TestClient
+from fastapi.testclient import TestClient  # noqa: E402
 
-from database import Base, engine
-from main import app
+from database import Base, engine  # noqa: E402
+from main import app  # noqa: E402
 
 
 client = TestClient(app)
@@ -98,4 +98,3 @@ def test_reject_already_processed_expense() -> None:
 
     assert response.status_code == 400
     assert response.json()["detail"] == "La depense a deja ete traitee"
-
