@@ -1,8 +1,13 @@
 💼 FinSmart Pro
+
+
+
 📌 Description
 FinSmart Pro est une solution SaaS destinée aux PME pour gérer leur comptabilité, facturation, trésorerie et reporting dans une plateforme moderne et centralisée.
 
 🎯 Objectif
+
+
 Simplifier la gestion financière des entreprises clientes du cabinet "Expertise & Conseil".
 
 🚀 Fonctionnalités principales
@@ -13,6 +18,7 @@ Simplifier la gestion financière des entreprises clientes du cabinet "Expertise
 👥 Gestion multi-utilisateurs (rôles & permissions)
 
 🛠️ Stack technique
+
 Backend : Python FastAPI
 Base de données : PostgreSQL
 Frontend : JavaScript ( React )
