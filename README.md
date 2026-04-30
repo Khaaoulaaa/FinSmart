@@ -39,6 +39,12 @@ Cette premiere fonctionnalite suit le PDF fourni :
 
 ```text
 FinSmart/
++-- .github/workflows/ci.yml
++-- docs/
+|   +-- fonctionnalite-depenses.md
+|   +-- deploiement-staging.md
++-- tests/
+|   +-- test_expenses.py
 +-- main.py
 +-- config.py
 +-- database.py
@@ -47,7 +53,9 @@ FinSmart/
 +-- requirements.txt
 +-- Dockerfile
 +-- docker-compose.yml
++-- docker-compose.staging.yml
 +-- .env.example
++-- .env.staging.example
 +-- cahier-des-charges.md
 +-- ci.yml
 ```
@@ -99,6 +107,58 @@ pytest
 
 La CI GitHub Actions execute aussi les tests avec le fichier `.github/workflows/ci.yml`.
 
+Les tests couvrent actuellement :
+
+- la creation d'une depense ;
+- la validation d'une depense par le comptable ;
+- le blocage d'une depense deja traitee.
+
+## Deploiement staging
+
+Une configuration de staging est fournie pour un VPS Ubuntu avec Docker Compose.
+
+Documentation detaillee :
+
+```text
+docs/deploiement-staging.md
+```
+
+Commandes principales sur le serveur :
+
+```bash
+cp .env.staging.example .env
+docker compose -f docker-compose.staging.yml up --build -d
+```
+
+Verification :
+
+```bash
+curl http://localhost:8000/health
+```
+
+La documentation Swagger du staging sera disponible sur :
+
+```text
+http://IP_DU_VPS:8000/docs
+```
+
+## Conception de la fonctionnalite
+
+La conception detaillee de la gestion des depenses est disponible dans :
+
+```text
+docs/fonctionnalite-depenses.md
+```
+
+Ce document contient :
+
+- les acteurs ;
+- les regles metier ;
+- le modele logique de donnees ;
+- les diagrammes de sequence ;
+- la liste des endpoints ;
+- les tests prevus.
+
 ## Endpoints depenses
 
 ### Creer une depense
@@ -116,7 +176,9 @@ Exemple JSON :
   "description": "Papier et stylos pour le bureau",
   "category": "Fournitures",
   "amount": "125.50",
-  "expense_date": "2026-04-30"
+  "expense_date": "2026-04-30",
+  "receipt_url": "https://example.com/recu.pdf",
+  "created_by_name": "Gerant PME"
 }
 ```
 
@@ -147,6 +209,7 @@ PATCH /expenses/1/approve
 
 ```json
 {
+  "decision_by_name": "Comptable",
   "comment": "Depense conforme"
 }
 ```
@@ -159,6 +222,7 @@ PATCH /expenses/1/reject
 
 ```json
 {
+  "decision_by_name": "Comptable",
   "comment": "Justificatif manquant"
 }
 ```
