@@ -1,69 +1,61 @@
 # FinSmart Pro
 
-FinSmart Pro est une solution SaaS destinée aux PME pour centraliser la gestion comptable, la facturation, la trésorerie et le reporting financier.
+FinSmart Pro est une solution SaaS destinee aux PME pour centraliser la gestion comptable, la facturation, la tresorerie et le reporting financier.
 
-Le projet est réalisé pour le cabinet **Expertise & Conseil** afin de simplifier le suivi financier de ses entreprises clientes.
+Le projet est realise pour le cabinet **Expertise & Conseil** afin de simplifier le suivi financier de ses entreprises clientes.
 
-## Objectifs
+## Fonctionnalite ajoutee : gestion des depenses
 
-- Centraliser les données financières des PME dans une seule plateforme.
-- Automatiser une partie de la comptabilité et du reporting.
-- Faciliter la création de devis, factures et relances.
-- Améliorer la visibilité sur la trésorerie.
-- Permettre une gestion multi-utilisateurs avec rôles et permissions.
+Cette premiere fonctionnalite suit le PDF fourni :
 
-## Fonctionnalités prévues
+- le Gerant PME saisit une depense ;
+- la depense est en statut `pending` au depart ;
+- le Comptable peut valider la depense ;
+- le Comptable peut refuser la depense ;
+- les depenses sont stockees dans PostgreSQL.
 
-- Comptabilité : saisie des écritures, génération automatique du bilan.
-- Facturation : devis, factures, suivi des paiements et relances.
-- Trésorerie : prévisionnel, rapprochement bancaire.
-- Reporting : tableaux de bord, indicateurs financiers, export Excel.
-- Gestion multi-utilisateurs : administrateur, comptable, client, lecteur.
+## Elements demandes pour le rendu
+
+| Demande | Realisation dans le projet |
+| --- | --- |
+| Developpement de la fonctionnalite | API FastAPI complete pour creer, consulter, valider et refuser une depense |
+| Tests unitaires minimum | Tests disponibles dans `tests/test_expenses.py` |
+| Deploiement staging | Configuration dans `docker-compose.staging.yml` et documentation dans `docs/deploiement-staging.md` |
+| Conception de la fonctionnalite | Documentation dans `docs/fonctionnalite-depenses.md` |
 
 ## Stack technique
 
 | Couche | Technologie |
 | --- | --- |
 | Backend | Python, FastAPI |
-| Base de données | PostgreSQL |
-| Frontend | JavaScript, React |
-| Conteneurisation | Docker |
+| Base de donnees | PostgreSQL |
+| ORM | SQLAlchemy |
+| Validation | Pydantic |
+| Conteneurisation | Docker, Docker Compose |
 | CI/CD | GitHub Actions |
 | OS cible | Linux |
 
-## Structure du projet
+## Structure actuelle
 
 ```text
-finsmart-pro/
-├── .github/workflows/ci.yml
-├── backend/
-│   ├── app/
-│   │   ├── __init__.py
-│   │   └── main.py
-│   └── requirements.txt
-├── docs/
-│   └── cahier-des-charges.md
-├── Dockerfile
-├── .gitignore
-└── README.md
+FinSmart/
++-- main.py
++-- config.py
++-- database.py
++-- models.py
++-- schemas.py
++-- requirements.txt
++-- Dockerfile
++-- docker-compose.yml
++-- .env.example
++-- cahier-des-charges.md
++-- ci.yml
 ```
 
-## Démarrage local
-
-### Prérequis
-
-- Python 3.11+
-- Docker
-- Git
-
-### Installation backend
+## Demarrage avec Docker Compose
 
 ```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload
+docker compose up --build
 ```
 
 L'API est disponible sur :
@@ -78,24 +70,101 @@ La documentation Swagger est disponible sur :
 http://localhost:8000/docs
 ```
 
-## Démarrage avec Docker
+## Demarrage local sans Docker pour l'API
 
-```bash
-docker build -t finsmart-pro .
-docker run -p 8000:8000 finsmart-pro
+Il faut d'abord lancer PostgreSQL avec les informations suivantes :
+
+```text
+database: finsmart
+user: finsmart
+password: finsmart
+host: localhost
+port: 5432
 ```
 
-## Pipeline CI
+Puis installer et lancer l'API :
 
-Un premier workflow GitHub Actions est disponible dans `.github/workflows/ci.yml`.
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
 
-Il vérifie automatiquement :
+## Tests
 
-- l'installation des dépendances Python ;
-- le linting avec Ruff ;
-- l'exécution des tests avec Pytest.
+```bash
+pytest
+```
 
-## Statut du projet
+La CI GitHub Actions execute aussi les tests avec le fichier `.github/workflows/ci.yml`.
 
-Projet scolaire en phase d'initialisation.
+## Endpoints depenses
 
+### Creer une depense
+
+```http
+POST /expenses
+```
+
+Exemple JSON :
+
+```json
+{
+  "pme_id": 1,
+  "title": "Achat fournitures",
+  "description": "Papier et stylos pour le bureau",
+  "category": "Fournitures",
+  "amount": "125.50",
+  "expense_date": "2026-04-30"
+}
+```
+
+### Lister les depenses
+
+```http
+GET /expenses
+```
+
+Filtres possibles :
+
+```http
+GET /expenses?pme_id=1
+GET /expenses?status_filter=pending
+```
+
+### Consulter une depense
+
+```http
+GET /expenses/1
+```
+
+### Valider une depense
+
+```http
+PATCH /expenses/1/approve
+```
+
+```json
+{
+  "comment": "Depense conforme"
+}
+```
+
+### Refuser une depense
+
+```http
+PATCH /expenses/1/reject
+```
+
+```json
+{
+  "comment": "Justificatif manquant"
+}
+```
+
+## Statuts disponibles
+
+- `pending` : depense en attente de traitement ;
+- `approved` : depense validee par le comptable ;
+- `rejected` : depense refusee par le comptable.
