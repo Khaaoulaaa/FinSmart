@@ -11,21 +11,35 @@ FinSmart Pro est une solution SaaS destinée aux PME pour gérer leur comptabili
 Simplifier la gestion financière des entreprises clientes du cabinet "Expertise & Conseil".
 
 🚀 Fonctionnalités principales
+
 📊 Comptabilité (écritures, bilan automatique)
 🧾 Facturation (devis, factures, relances)
+
 💰 Trésorerie (prévisionnel, rapprochement bancaire)
+
 📈 Reporting (analytics, export Excel)
+
 👥 Gestion multi-utilisateurs (rôles & permissions)
+
 
 🛠️ Stack technique
 
 Backend : Python FastAPI
+
 Base de données : PostgreSQL
+
 Frontend : JavaScript ( React )
+
 Conteneurisation : Docker
+
 CI/CD : GitHub Actions
+
 OS : Linux. voila le project et j'ai besoin que tu m'aide pour Repo Github initialisé
+
 Readme professionnel
+
 Démarrage pipeline CI/CD (au moins la partie Ci)
+
 Dockerfile (début)
+
 Cahier des charges au format présenté en visio (md ou autre)
