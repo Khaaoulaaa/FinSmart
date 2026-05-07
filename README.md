@@ -119,6 +119,16 @@ npm run build
 
 La CI GitHub Actions execute les checks backend et frontend avec `.github/workflows/ci.yml`.
 
+## Livrables projet
+
+Les livrables de suivi sont disponibles dans le dossier `livrables/` :
+
+- backlog mise a jour ;
+- bilan du Sprint 1 ;
+- planning Sprint 2 ;
+- debut du dossier projet ;
+- debut du dossier professionnel bloc 1.
+
 ## Endpoints depenses
 
 | Methode | Route | Description |
@@ -134,4 +144,3 @@ La CI GitHub Actions execute les checks backend et frontend avec `.github/workfl
 - `pending` : depense en attente de traitement ;
 - `approved` : depense validee par le comptable ;
 - `rejected` : depense refusee par le comptable.
-
