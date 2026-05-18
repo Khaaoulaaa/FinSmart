@@ -40,11 +40,25 @@ Le projet commence par la gestion des depenses car cette fonctionnalite represen
 4. le Comptable valide ou refuse la depense ;
 5. l'historique reste consultable.
 
-## 4. Problematique
+## 4. Fin du contexte et enjeux
+
+Le besoin principal du cabinet est de fiabiliser le suivi des depenses et de preparer une base applicative evolutive. La gestion des depenses constitue une premiere brique car elle fait intervenir les principaux elements attendus dans une application professionnelle : saisie utilisateur, validation metier, stockage en base de donnees, controle par un autre role et consultation d'un historique.
+
+Les enjeux identifies sont les suivants :
+
+- **enjeu fonctionnel** : simplifier la declaration et le controle des depenses ;
+- **enjeu metier** : reduire les erreurs et ameliorer la tracabilite des decisions ;
+- **enjeu technique** : construire une architecture maintenable avec API, frontend et base de donnees ;
+- **enjeu securite** : preparer la separation des roles et la protection des actions sensibles ;
+- **enjeu qualite** : accompagner les developpements avec des tests et une integration continue.
+
+La solution doit rester simple a utiliser pour un gerant de PME, tout en donnant au comptable les informations necessaires pour prendre une decision fiable.
+
+## 5. Problematique
 
 Comment concevoir une application web permettant aux PME de centraliser et fiabiliser leur gestion financiere, tout en facilitant le travail de controle du cabinet comptable ?
 
-## 5. Objectifs du projet
+## 6. Objectifs du projet
 
 ### Objectif principal
 
@@ -60,7 +74,7 @@ Simplifier la gestion financiere des PME clientes du cabinet Expertise & Conseil
 - preparer un environnement de staging ;
 - documenter la conception et le suivi du projet.
 
-## 6. Perimetre fonctionnel
+## 7. Perimetre fonctionnel
 
 Le perimetre global du projet comprend :
 
@@ -74,7 +88,7 @@ Le perimetre global du projet comprend :
 
 Pour le Sprint 1, le perimetre traite est limite a la gestion des depenses.
 
-## 7. Fonctionnalite realisee au Sprint 1
+## 8. Fonctionnalite realisee au Sprint 1
 
 La fonctionnalite **Gestion des depenses** permet :
 
@@ -91,7 +105,7 @@ Les statuts utilises sont :
 - `approved` : depense validee ;
 - `rejected` : depense refusee.
 
-## 8. Architecture technique
+## 9. Architecture technique
 
 | Couche | Technologie |
 | --- | --- |
@@ -104,7 +118,7 @@ Les statuts utilises sont :
 | CI/CD | GitHub Actions |
 | Conteneurisation | Docker, Docker Compose |
 
-## 9. Methodologie projet
+## 10. Methodologie projet
 
 Le projet est organise selon une methode agile de type Scrum simplifiee.
 
@@ -119,7 +133,7 @@ Le travail est decoupe en sprints. Chaque sprint permet de :
 
 Cette methode permet de construire progressivement le projet et de prendre en compte les retours au fur et a mesure.
 
-## 10. Organisation Sprint 1
+## 11. Organisation Sprint 1
 
 ### Objectif Sprint 1
 
@@ -152,7 +166,7 @@ Certaines parties restent a poursuivre au Sprint 2 :
 - deploiement reel sur VPS ;
 - finalisation des tests d'integration frontend/backend.
 
-## 11. Organisation Sprint 2
+## 12. Organisation Sprint 2
 
 Le Sprint 2 doit renforcer la fonctionnalite existante.
 
@@ -165,9 +179,183 @@ Les priorites sont :
 - tester le staging ;
 - mettre a jour la documentation.
 
-## 12. Conclusion provisoire
+## 13. Demarrage de la conception
+
+La conception est demarree autour de la fonctionnalite de gestion des depenses. Elle sert de base pour structurer les futures fonctionnalites de FinSmart Pro.
+
+Les elements de conception produits ou en cours sont :
+
+- identification des acteurs ;
+- regles metier de la depense ;
+- modele de donnees initial ;
+- diagrammes UML de cas d'utilisation ;
+- diagrammes de sequence pour la creation et la validation ;
+- premiere version du modele logique de donnees.
+
+## 14. Conception BDD
+
+### Entites principales prevues
+
+| Entite | Role |
+| --- | --- |
+| `users` | Stocker les comptes utilisateurs et leurs roles |
+| `companies` | Representer les PME clientes du cabinet |
+| `expenses` | Stocker les depenses declarees par les gerants |
+| `expense_decisions` | Tracer les validations ou refus comptables |
+| `categories` | Classer les depenses par nature comptable |
+
+### Modele logique de donnees initial
+
+```text
+companies
+- id PK
+- name
+- vat_number
+- created_at
+
+users
+- id PK
+- company_id FK nullable
+- full_name
+- email
+- password_hash
+- role
+- created_at
+
+categories
+- id PK
+- name
+- is_active
+
+expenses
+- id PK
+- company_id FK
+- category_id FK nullable
+- title
+- description
+- amount
+- expense_date
+- receipt_url
+- status
+- created_by_user_id FK
+- created_at
+- updated_at
+
+expense_decisions
+- id PK
+- expense_id FK
+- decided_by_user_id FK
+- decision
+- comment
+- decided_at
+```
+
+### Contraintes metier BDD
+
+- une depense appartient a une seule PME ;
+- une depense est creee par un utilisateur de type Gerant PME ;
+- une depense commence avec le statut `pending` ;
+- une decision comptable transforme la depense en `approved` ou `rejected` ;
+- une depense deja traitee ne doit pas recevoir une seconde decision ;
+- le montant d'une depense doit etre superieur a zero.
+
+## 15. Conception UML
+
+### Diagramme de cas d'utilisation
+
+```mermaid
+flowchart LR
+    Gerant[Gerant PME]
+    Comptable[Comptable]
+    Admin[Admin]
+
+    UC1[Declarer une depense]
+    UC2[Consulter ses depenses]
+    UC3[Filtrer les depenses]
+    UC4[Valider une depense]
+    UC5[Refuser une depense]
+    UC6[Gerer les utilisateurs]
+    UC7[Gerer les categories]
+
+    Gerant --> UC1
+    Gerant --> UC2
+    Gerant --> UC3
+    Comptable --> UC2
+    Comptable --> UC3
+    Comptable --> UC4
+    Comptable --> UC5
+    Admin --> UC6
+    Admin --> UC7
+```
+
+### Diagramme de classes simplifie
+
+```mermaid
+classDiagram
+    class Company {
+        int id
+        string name
+        string vat_number
+    }
+
+    class User {
+        int id
+        string full_name
+        string email
+        string role
+    }
+
+    class Category {
+        int id
+        string name
+        bool is_active
+    }
+
+    class Expense {
+        int id
+        string title
+        decimal amount
+        date expense_date
+        string status
+    }
+
+    class ExpenseDecision {
+        int id
+        string decision
+        string comment
+        datetime decided_at
+    }
+
+    Company "1" --> "0..*" User
+    Company "1" --> "0..*" Expense
+    Category "1" --> "0..*" Expense
+    User "1" --> "0..*" Expense
+    Expense "1" --> "0..1" ExpenseDecision
+    User "1" --> "0..*" ExpenseDecision
+```
+
+### Diagramme de sequence - validation d'une depense
+
+```mermaid
+sequenceDiagram
+    actor Comptable
+    participant Front as Interface React
+    participant API as API FastAPI
+    participant DB as PostgreSQL
+
+    Comptable->>Front: Clique sur Valider
+    Front->>API: PATCH /expenses/{id}/approve
+    API->>DB: Recherche de la depense
+    DB-->>API: Depense trouvee
+    API->>API: Verification status=pending
+    API->>DB: Mise a jour status=approved
+    DB-->>API: Depense mise a jour
+    API-->>Front: 200 OK
+    Front-->>Comptable: Statut mis a jour
+```
+
+## 16. Conclusion provisoire
 
 Le projet FinSmart Pro dispose maintenant d'une base technique solide et d'une premiere fonctionnalite concrete. La gestion des depenses constitue une premiere brique importante pour la future plateforme financiere.
 
-La suite du projet devra principalement porter sur la securite, les roles et la mise en conditions de deploiement.
-
+La suite du projet devra principalement porter sur la securite, les roles, l'authentification, la finalisation de la conception BDD/UML et la mise en conditions de deploiement.
