@@ -10,8 +10,9 @@ Le projet est realise pour le cabinet **Expertise & Conseil** afin de simplifier
 | --- | --- |
 | Repository GitHub | [Khaaoulaaa/FinSmart](https://github.com/Khaaoulaaa/FinSmart) |
 | Backlog et avancement | [Tickets GitHub FinSmart](https://github.com/Khaaoulaaa/FinSmart/issues) |
-| Dossier projet / livrables | [Dossier `livrables/`](https://github.com/Khaaoulaaa/FinSmart/tree/main/livrables) |
-| Dossier professionnel | [Livrables du dossier professionnel](https://github.com/Khaaoulaaa/FinSmart/tree/main/livrables) |
+| Dossier projet | [livrables/dossier-projet.md](https://github.com/Khaaoulaaa/FinSmart/blob/main/livrables/dossier-projet.md) |
+| Dossier professionnel | [livrables/dossier-professionnel.md](https://github.com/Khaaoulaaa/FinSmart/blob/main/livrables/dossier-professionnel.md) |
+| Dossier livrables | [Dossier `livrables/`](https://github.com/Khaaoulaaa/FinSmart/tree/main/livrables) |
 | Documentation de deploiement | [docs/deploiement-staging.md](https://github.com/Khaaoulaaa/FinSmart/blob/main/docs/deploiement-staging.md) |
 | Application deployee | A ajouter des que l'URL de production est disponible - suivi dans [#9](https://github.com/Khaaoulaaa/FinSmart/issues/9) |
 
@@ -143,8 +144,8 @@ Les livrables de suivi sont disponibles dans le dossier `livrables/` :
 - backlog mise a jour ;
 - bilan du Sprint 1 ;
 - planning Sprint 2 ;
-- debut du dossier projet ;
-- debut du dossier professionnel bloc 1.
+- dossier projet ;
+- dossier professionnel.
 
 ## Endpoints depenses
 
