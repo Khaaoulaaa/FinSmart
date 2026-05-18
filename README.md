@@ -4,6 +4,23 @@ FinSmart Pro est une solution SaaS destinee aux PME pour centraliser la gestion 
 
 Le projet est realise pour le cabinet **Expertise & Conseil** afin de simplifier le suivi financier de ses entreprises clientes.
 
+## Liens importants
+
+| Element | Lien |
+| --- | --- |
+| Repository GitHub | [Khaaoulaaa/FinSmart](https://github.com/Khaaoulaaa/FinSmart) |
+| Backlog et avancement | [Tickets GitHub FinSmart](https://github.com/Khaaoulaaa/FinSmart/issues) |
+| Dossier projet / livrables | [Dossier `livrables/`](https://github.com/Khaaoulaaa/FinSmart/tree/main/livrables) |
+| Dossier professionnel | [Livrables du dossier professionnel](https://github.com/Khaaoulaaa/FinSmart/tree/main/livrables) |
+| Documentation de deploiement | [docs/deploiement-staging.md](https://github.com/Khaaoulaaa/FinSmart/blob/main/docs/deploiement-staging.md) |
+| Application deployee | A ajouter des que l'URL de production est disponible - suivi dans [#9](https://github.com/Khaaoulaaa/FinSmart/issues/9) |
+
+## Suivi de projet
+
+La backlog est suivie avec les tickets GitHub du repository. Les tickets sont etiquetes avec `backlog` et `todo` pour montrer les elements restants et l'avancement du projet.
+
+Pour les prochains developpements, les commits seront decoupes de maniere atomique : une fonctionnalite, une correction ou une mise a jour documentaire par commit.
+
 ## Fonctionnalite avancee : gestion des depenses
 
 La fonctionnalite depenses couvre maintenant le backend et le frontend :
