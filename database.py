@@ -1,6 +1,8 @@
 from collections.abc import Generator
+from time import sleep
 
 from sqlalchemy import create_engine
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
@@ -27,4 +29,11 @@ def get_db() -> Generator[Session, None, None]:
 
 
 def init_db() -> None:
-    Base.metadata.create_all(bind=engine)
+    for attempt in range(10):
+        try:
+            Base.metadata.create_all(bind=engine)
+            return
+        except OperationalError:
+            if attempt == 9:
+                raise
+            sleep(1)
