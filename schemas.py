@@ -3,7 +3,26 @@ from decimal import Decimal
 
 from pydantic import BaseModel, Field
 
-from models import ExpenseStatus
+from models import ExpenseStatus, UserRole
+
+
+class PmeRead(BaseModel):
+    id: int
+    name: str
+    vat_number: str | None
+    contact_email: str | None
+
+    model_config = {"from_attributes": True}
+
+
+class UserRead(BaseModel):
+    id: int
+    pme_id: int | None
+    full_name: str
+    email: str
+    role: UserRole
+
+    model_config = {"from_attributes": True}
 
 
 class ExpenseCreate(BaseModel):
