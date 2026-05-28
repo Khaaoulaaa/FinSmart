@@ -2,7 +2,7 @@ from datetime import date, datetime
 from decimal import Decimal
 from enum import Enum
 
-from sqlalchemy import Date, DateTime
+from sqlalchemy import Date, DateTime, ForeignKey
 from sqlalchemy import Enum as SqlEnum
 from sqlalchemy import Integer, Numeric, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column
@@ -10,10 +10,38 @@ from sqlalchemy.orm import Mapped, mapped_column
 from database import Base
 
 
+class UserRole(str, Enum):
+    admin = "admin"
+    comptable = "comptable"
+    gerant_pme = "gerant_pme"
+
+
 class ExpenseStatus(str, Enum):
     pending = "pending"
     approved = "approved"
     rejected = "rejected"
+
+
+class Pme(Base):
+    __tablename__ = "pmes"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(150), unique=True, index=True)
+    vat_number: Mapped[str | None] = mapped_column(String(40), unique=True, nullable=True)
+    contact_email: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    pme_id: Mapped[int | None] = mapped_column(ForeignKey("pmes.id"), nullable=True, index=True)
+    full_name: Mapped[str] = mapped_column(String(100), index=True)
+    email: Mapped[str] = mapped_column(String(120), unique=True, index=True)
+    password_hash: Mapped[str] = mapped_column(String(255))
+    role: Mapped[UserRole] = mapped_column(SqlEnum(UserRole), index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
 class Expense(Base):
