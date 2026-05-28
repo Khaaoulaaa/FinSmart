@@ -22,6 +22,13 @@ class ExpenseStatus(str, Enum):
     rejected = "rejected"
 
 
+class InvoiceStatus(str, Enum):
+    draft = "draft"
+    sent = "sent"
+    paid = "paid"
+    overdue = "overdue"
+
+
 class Pme(Base):
     __tablename__ = "pmes"
 
@@ -65,6 +72,32 @@ class Expense(Base):
     decision_by_role: Mapped[str | None] = mapped_column(String(50), nullable=True)
     decision_by_name: Mapped[str | None] = mapped_column(String(100), nullable=True)
     decision_comment: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+    )
+
+
+class Invoice(Base):
+    __tablename__ = "invoices"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    pme_id: Mapped[int] = mapped_column(Integer, index=True)
+    invoice_number: Mapped[str] = mapped_column(String(40), unique=True, index=True)
+    client_name: Mapped[str] = mapped_column(String(150), index=True)
+    subject: Mapped[str] = mapped_column(String(180))
+    amount_ht: Mapped[Decimal] = mapped_column(Numeric(12, 2))
+    vat_rate: Mapped[Decimal] = mapped_column(Numeric(5, 2), default=Decimal("21.00"))
+    issue_date: Mapped[date] = mapped_column(Date)
+    due_date: Mapped[date] = mapped_column(Date)
+    status: Mapped[InvoiceStatus] = mapped_column(
+        SqlEnum(InvoiceStatus),
+        default=InvoiceStatus.draft,
+        index=True,
+    )
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

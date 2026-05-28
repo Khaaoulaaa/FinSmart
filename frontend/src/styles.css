@@ -548,6 +548,11 @@ textarea:focus {
   padding: 0 14px;
 }
 
+.invoice-table-header,
+.invoice-row {
+  grid-template-columns: minmax(190px, 1.1fr) minmax(150px, 0.9fr) minmax(110px, 0.7fr) minmax(110px, 0.7fr) minmax(120px, 0.7fr);
+}
+
 .table-header {
   color: #64748b;
   background: #f8fafc;
@@ -603,6 +608,26 @@ textarea:focus {
 }
 
 .status-pill.rejected {
+  color: #991b1b;
+  background: #fee2e2;
+}
+
+.status-pill.invoice-draft {
+  color: #334155;
+  background: #e2e8f0;
+}
+
+.status-pill.invoice-sent {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+
+.status-pill.invoice-paid {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.status-pill.invoice-overdue {
   color: #991b1b;
   background: #fee2e2;
 }

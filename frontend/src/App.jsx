@@ -16,6 +16,7 @@ import {
   ReceiptText,
   RefreshCw,
   Search,
+  Send,
   ShieldCheck,
   UserRound,
   X,
@@ -69,16 +70,43 @@ const initialForm = {
   created_by_name: "",
 };
 
+const initialInvoiceForm = {
+  pme_id: 1,
+  invoice_number: "",
+  client_name: "",
+  subject: "",
+  amount_ht: "",
+  vat_rate: "21.00",
+  issue_date: new Date().toISOString().slice(0, 10),
+  due_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+  status: "draft",
+  notes: "",
+};
+
 const statusLabels = {
   pending: "En attente",
   approved: "Validee",
   rejected: "Refusee",
 };
 
+const invoiceStatusLabels = {
+  draft: "Brouillon",
+  sent: "Envoyee",
+  paid: "Payee",
+  overdue: "En retard",
+};
+
 const statusIcons = {
   pending: Clock3,
   approved: BadgeCheck,
   rejected: Ban,
+};
+
+const invoiceStatusIcons = {
+  draft: FileText,
+  sent: Send,
+  paid: BadgeCheck,
+  overdue: Ban,
 };
 
 function formatCurrency(value) {
@@ -96,16 +124,24 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [loginForm, setLoginForm] = useState(initialLogin);
   const [loginError, setLoginError] = useState("");
+  const [activeView, setActiveView] = useState("expenses");
   const [expenses, setExpenses] = useState([]);
+  const [invoices, setInvoices] = useState([]);
   const [form, setForm] = useState(initialForm);
+  const [invoiceForm, setInvoiceForm] = useState(initialInvoiceForm);
   const [statusFilter, setStatusFilter] = useState("all");
+  const [invoiceStatusFilter, setInvoiceStatusFilter] = useState("all");
   const [search, setSearch] = useState("");
+  const [invoiceSearch, setInvoiceSearch] = useState("");
   const [loading, setLoading] = useState(false);
+  const [invoiceLoading, setInvoiceLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [invoiceSaving, setInvoiceSaving] = useState(false);
   const [error, setError] = useState("");
 
   const canCreateExpense = currentUser?.role === "gerant_pme" || currentUser?.role === "admin";
   const canDecideExpense = currentUser?.role === "comptable" || currentUser?.role === "admin";
+  const canManageInvoices = currentUser?.role === "comptable" || currentUser?.role === "admin";
 
   const filteredExpenses = useMemo(() => {
     return expenses.filter((expense) => {
@@ -128,6 +164,30 @@ function App() {
     );
   }, [expenses]);
 
+  const filteredInvoices = useMemo(() => {
+    return invoices.filter((invoice) => {
+      const matchesStatus = invoiceStatusFilter === "all" || invoice.status === invoiceStatusFilter;
+      const searchable = `${invoice.invoice_number} ${invoice.client_name} ${invoice.subject}`.toLowerCase();
+      const matchesSearch = searchable.includes(invoiceSearch.toLowerCase());
+
+      return matchesStatus && matchesSearch;
+    });
+  }, [invoices, invoiceSearch, invoiceStatusFilter]);
+
+  const invoiceSummary = useMemo(() => {
+    return invoices.reduce(
+      (acc, invoice) => {
+        const amountHt = Number(invoice.amount_ht);
+        const vatRate = Number(invoice.vat_rate);
+
+        acc.total += amountHt * (1 + vatRate / 100);
+        acc[invoice.status] += 1;
+        return acc;
+      },
+      { total: 0, draft: 0, sent: 0, paid: 0, overdue: 0 },
+    );
+  }, [invoices]);
+
   const loadExpenses = useCallback(async () => {
     setLoading(true);
     setError("");
@@ -148,11 +208,32 @@ function App() {
     }
   }, []);
 
+  const loadInvoices = useCallback(async () => {
+    setInvoiceLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(`${API_URL}/invoices`);
+
+      if (!response.ok) {
+        throw new Error("Impossible de charger les factures");
+      }
+
+      const data = await response.json();
+      setInvoices(data);
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setInvoiceLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (currentUser) {
       loadExpenses();
+      loadInvoices();
     }
-  }, [currentUser, loadExpenses]);
+  }, [currentUser, loadExpenses, loadInvoices]);
 
   function updateLoginForm(event) {
     const { name, value } = event.target;
@@ -186,19 +267,32 @@ function App() {
       pme_id: user.pme_id,
       created_by_name: user.name,
     }));
+    setInvoiceForm((currentForm) => ({
+      ...currentForm,
+      pme_id: user.pme_id,
+    }));
   }
 
   function logout() {
     setCurrentUser(null);
     setExpenses([]);
+    setInvoices([]);
     setError("");
     setStatusFilter("all");
+    setInvoiceStatusFilter("all");
     setSearch("");
+    setInvoiceSearch("");
+    setActiveView("expenses");
   }
 
   function updateForm(event) {
     const { name, value } = event.target;
     setForm((currentForm) => ({ ...currentForm, [name]: value }));
+  }
+
+  function updateInvoiceForm(event) {
+    const { name, value } = event.target;
+    setInvoiceForm((currentForm) => ({ ...currentForm, [name]: value }));
   }
 
   async function createExpense(event) {
@@ -266,6 +360,45 @@ function App() {
       await loadExpenses();
     } catch (requestError) {
       setError(requestError.message);
+    }
+  }
+
+  async function createInvoice(event) {
+    event.preventDefault();
+
+    if (!canManageInvoices) {
+      setError("Seul un comptable ou un admin peut creer une facture.");
+      return;
+    }
+
+    setInvoiceSaving(true);
+    setError("");
+
+    const payload = {
+      ...invoiceForm,
+      pme_id: Number(invoiceForm.pme_id),
+      amount_ht: Number(invoiceForm.amount_ht).toFixed(2),
+      vat_rate: Number(invoiceForm.vat_rate).toFixed(2),
+      notes: invoiceForm.notes || null,
+    };
+
+    try {
+      const response = await fetch(`${API_URL}/invoices`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("La facture n'a pas pu etre creee");
+      }
+
+      setInvoiceForm({ ...initialInvoiceForm, pme_id: currentUser.pme_id });
+      await loadInvoices();
+    } catch (requestError) {
+      setError(requestError.message);
+    } finally {
+      setInvoiceSaving(false);
     }
   }
 
@@ -360,11 +493,19 @@ function App() {
         </div>
 
         <nav className="nav-list" aria-label="Navigation principale">
-          <button className="nav-item active" type="button">
+          <button
+            className={`nav-item ${activeView === "expenses" ? "active" : ""}`}
+            type="button"
+            onClick={() => setActiveView("expenses")}
+          >
             <ReceiptText size={18} />
             Depenses
           </button>
-          <button className="nav-item" type="button">
+          <button
+            className={`nav-item ${activeView === "invoices" ? "active" : ""}`}
+            type="button"
+            onClick={() => setActiveView("invoices")}
+          >
             <FileText size={18} />
             Facturation
           </button>
@@ -393,10 +534,15 @@ function App() {
         <header className="topbar">
           <div>
             <p className="eyebrow">Gestion financiere PME</p>
-            <h1>Suivi des depenses</h1>
+            <h1>{activeView === "expenses" ? "Suivi des depenses" : "Facturation clients"}</h1>
           </div>
           <div className="topbar-actions">
-            <button className="icon-button" type="button" onClick={loadExpenses} title="Actualiser">
+            <button
+              className="icon-button"
+              type="button"
+              onClick={activeView === "expenses" ? loadExpenses : loadInvoices}
+              title="Actualiser"
+            >
               <RefreshCw size={18} />
             </button>
             <button className="secondary-button" type="button" onClick={logout}>
@@ -427,6 +573,8 @@ function App() {
           </div>
         ) : null}
 
+        {activeView === "expenses" ? (
+          <>
         <section className="summary-grid" aria-label="Indicateurs depenses">
           <SummaryTile label="Total declare" value={formatCurrency(summary.total)} icon={CircleDollarSign} />
           <SummaryTile label="En attente" value={summary.pending} icon={Clock3} />
@@ -536,6 +684,131 @@ function App() {
             </div>
           </section>
         </section>
+          </>
+        ) : (
+          <>
+            <section className="summary-grid" aria-label="Indicateurs factures">
+              <SummaryTile label="Total TTC" value={formatCurrency(invoiceSummary.total)} icon={CircleDollarSign} />
+              <SummaryTile label="Brouillons" value={invoiceSummary.draft} icon={FileText} />
+              <SummaryTile label="Envoyees" value={invoiceSummary.sent} icon={Send} />
+              <SummaryTile label="Payees" value={invoiceSummary.paid} icon={BadgeCheck} />
+            </section>
+
+            <section className="content-grid">
+              <form className="expense-form" onSubmit={createInvoice} aria-disabled={!canManageInvoices}>
+                <div className="section-heading">
+                  <FileText size={18} />
+                  <h2>Nouvelle facture</h2>
+                </div>
+
+                {!canManageInvoices ? <p className="muted-note">Ce profil peut consulter les factures, mais ne peut pas en creer.</p> : null}
+
+                <div className="form-row">
+                  <label>
+                    Numero
+                    <input name="invoice_number" value={invoiceForm.invoice_number} onChange={updateInvoiceForm} required disabled={!canManageInvoices} />
+                  </label>
+                  <label>
+                    PME
+                    <input name="pme_id" value={invoiceForm.pme_id} onChange={updateInvoiceForm} type="number" min="1" required disabled={!canManageInvoices} />
+                  </label>
+                </div>
+
+                <label>
+                  Client
+                  <input name="client_name" value={invoiceForm.client_name} onChange={updateInvoiceForm} minLength="2" required disabled={!canManageInvoices} />
+                </label>
+
+                <label>
+                  Objet
+                  <input name="subject" value={invoiceForm.subject} onChange={updateInvoiceForm} minLength="3" required disabled={!canManageInvoices} />
+                </label>
+
+                <div className="form-row">
+                  <label>
+                    Montant HT
+                    <input name="amount_ht" value={invoiceForm.amount_ht} onChange={updateInvoiceForm} type="number" min="0.01" step="0.01" required disabled={!canManageInvoices} />
+                  </label>
+                  <label>
+                    TVA %
+                    <input name="vat_rate" value={invoiceForm.vat_rate} onChange={updateInvoiceForm} type="number" min="0" max="100" step="0.01" required disabled={!canManageInvoices} />
+                  </label>
+                </div>
+
+                <div className="form-row">
+                  <label>
+                    Emission
+                    <input name="issue_date" value={invoiceForm.issue_date} onChange={updateInvoiceForm} type="date" required disabled={!canManageInvoices} />
+                  </label>
+                  <label>
+                    Echeance
+                    <input name="due_date" value={invoiceForm.due_date} onChange={updateInvoiceForm} type="date" required disabled={!canManageInvoices} />
+                  </label>
+                </div>
+
+                <label>
+                  Statut
+                  <select name="status" value={invoiceForm.status} onChange={updateInvoiceForm} disabled={!canManageInvoices}>
+                    <option value="draft">Brouillon</option>
+                    <option value="sent">Envoyee</option>
+                    <option value="paid">Payee</option>
+                    <option value="overdue">En retard</option>
+                  </select>
+                </label>
+
+                <label>
+                  Notes
+                  <textarea name="notes" value={invoiceForm.notes} onChange={updateInvoiceForm} rows="3" disabled={!canManageInvoices} />
+                </label>
+
+                <button className="primary-button" type="submit" disabled={invoiceSaving || !canManageInvoices}>
+                  <Plus size={18} />
+                  {invoiceSaving ? "Enregistrement" : "Ajouter"}
+                </button>
+              </form>
+
+              <section className="expense-panel">
+                <div className="panel-toolbar">
+                  <div className="search-field">
+                    <Search size={17} />
+                    <input value={invoiceSearch} onChange={(event) => setInvoiceSearch(event.target.value)} placeholder="Rechercher une facture" />
+                  </div>
+
+                  <div className="filter-group" aria-label="Filtre statut facture">
+                    <Filter size={17} />
+                    <select value={invoiceStatusFilter} onChange={(event) => setInvoiceStatusFilter(event.target.value)}>
+                      <option value="all">Tous</option>
+                      <option value="draft">Brouillons</option>
+                      <option value="sent">Envoyees</option>
+                      <option value="paid">Payees</option>
+                      <option value="overdue">En retard</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="expense-table" aria-busy={invoiceLoading}>
+                  <div className="table-header invoice-table-header">
+                    <span>Facture</span>
+                    <span>Client</span>
+                    <span>Total TTC</span>
+                    <span>Echeance</span>
+                    <span>Statut</span>
+                  </div>
+
+                  {filteredInvoices.map((invoice) => (
+                    <InvoiceRow key={invoice.id} invoice={invoice} />
+                  ))}
+
+                  {!invoiceLoading && filteredInvoices.length === 0 ? (
+                    <div className="empty-state">Aucune facture trouvee</div>
+                  ) : null}
+
+                  {invoiceLoading ? <div className="empty-state">Chargement</div> : null}
+                </div>
+              </section>
+            </section>
+          </>
+        )}
       </section>
     </main>
   );
@@ -579,6 +852,29 @@ function ExpenseRow({ expense, onDecision, canDecide }) {
         <button type="button" disabled={!isPending || !canDecide} onClick={() => onDecision(expense.id, "reject")} title="Refuser">
           <X size={16} />
         </button>
+      </div>
+    </article>
+  );
+}
+
+function InvoiceRow({ invoice }) {
+  const StatusIcon = invoiceStatusIcons[invoice.status];
+  const totalTtc = Number(invoice.amount_ht) * (1 + Number(invoice.vat_rate) / 100);
+
+  return (
+    <article className="expense-row invoice-row">
+      <div>
+        <strong>{invoice.invoice_number}</strong>
+        <span>{invoice.subject}</span>
+      </div>
+      <div>{invoice.client_name}</div>
+      <div className="amount">{formatCurrency(totalTtc)}</div>
+      <div>{formatDate(invoice.due_date)}</div>
+      <div>
+        <span className={`status-pill invoice-${invoice.status}`}>
+          <StatusIcon size={14} />
+          {invoiceStatusLabels[invoice.status]}
+        </span>
       </div>
     </article>
   );

@@ -6,8 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
 from database import get_db, init_db
-from models import Expense, ExpenseStatus, Pme, User
-from schemas import ExpenseCreate, ExpenseDecision, ExpenseRead, PmeRead, UserRead
+from models import Expense, ExpenseStatus, Invoice, InvoiceStatus, Pme, User
+from schemas import ExpenseCreate, ExpenseDecision, ExpenseRead, InvoiceCreate, InvoiceRead, PmeRead, UserRead
 
 
 @asynccontextmanager
@@ -58,6 +58,32 @@ def list_users(role: str | None = None, db: Session = Depends(get_db)) -> list[U
         query = query.filter(User.role == role)
 
     return query.order_by(User.full_name.asc()).all()
+
+
+@app.post("/invoices", response_model=InvoiceRead, status_code=status.HTTP_201_CREATED)
+def create_invoice(invoice_data: InvoiceCreate, db: Session = Depends(get_db)) -> Invoice:
+    invoice = Invoice(**invoice_data.model_dump())
+    db.add(invoice)
+    db.commit()
+    db.refresh(invoice)
+    return invoice
+
+
+@app.get("/invoices", response_model=list[InvoiceRead])
+def list_invoices(
+    pme_id: int | None = None,
+    status_filter: InvoiceStatus | None = None,
+    db: Session = Depends(get_db),
+) -> list[Invoice]:
+    query = db.query(Invoice)
+
+    if pme_id is not None:
+        query = query.filter(Invoice.pme_id == pme_id)
+
+    if status_filter is not None:
+        query = query.filter(Invoice.status == status_filter)
+
+    return query.order_by(Invoice.issue_date.desc(), Invoice.created_at.desc()).all()
 
 
 @app.post("/expenses", response_model=ExpenseRead, status_code=status.HTTP_201_CREATED)

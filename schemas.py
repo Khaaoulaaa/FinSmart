@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel, Field
 
-from models import ExpenseStatus, UserRole
+from models import ExpenseStatus, InvoiceStatus, UserRole
 
 
 class PmeRead(BaseModel):
@@ -56,6 +56,37 @@ class ExpenseRead(BaseModel):
     decision_by_role: str | None
     decision_by_name: str | None
     decision_comment: str | None
+    created_at: datetime
+    updated_at: datetime
+
+    model_config = {"from_attributes": True}
+
+
+class InvoiceCreate(BaseModel):
+    pme_id: int = Field(..., ge=1)
+    invoice_number: str = Field(..., min_length=3, max_length=40)
+    client_name: str = Field(..., min_length=2, max_length=150)
+    subject: str = Field(..., min_length=3, max_length=180)
+    amount_ht: Decimal = Field(..., gt=0, decimal_places=2)
+    vat_rate: Decimal = Field(default=Decimal("21.00"), ge=0, le=100, decimal_places=2)
+    issue_date: date
+    due_date: date
+    status: InvoiceStatus = InvoiceStatus.draft
+    notes: str | None = Field(default=None, max_length=500)
+
+
+class InvoiceRead(BaseModel):
+    id: int
+    pme_id: int
+    invoice_number: str
+    client_name: str
+    subject: str
+    amount_ht: Decimal
+    vat_rate: Decimal
+    issue_date: date
+    due_date: date
+    status: InvoiceStatus
+    notes: str | None
     created_at: datetime
     updated_at: datetime
 

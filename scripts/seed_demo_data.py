@@ -7,7 +7,7 @@ import sys
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from database import SessionLocal, init_db
-from models import Expense, ExpenseStatus, Pme, User, UserRole
+from models import Expense, ExpenseStatus, Invoice, InvoiceStatus, Pme, User, UserRole
 
 
 DEMO_PASSWORD_HASH = "$2b$10$demo.hash.for.local.prototype"
@@ -47,6 +47,10 @@ def expense_exists(db, title: str) -> bool:
     return db.query(Expense).filter(Expense.title == title).first() is not None
 
 
+def invoice_exists(db, invoice_number: str) -> bool:
+    return db.query(Invoice).filter(Invoice.invoice_number == invoice_number).first() is not None
+
+
 def create_expense(
     db,
     *,
@@ -77,6 +81,39 @@ def create_expense(
             decision_by_role="comptable" if decision_by_name else None,
             decision_by_name=decision_by_name,
             decision_comment=decision_comment,
+        ),
+    )
+
+
+def create_invoice(
+    db,
+    *,
+    pme_id: int,
+    invoice_number: str,
+    client_name: str,
+    subject: str,
+    amount_ht: str,
+    vat_rate: str,
+    issue_date: date,
+    due_date: date,
+    status: InvoiceStatus,
+    notes: str | None = None,
+) -> None:
+    if invoice_exists(db, invoice_number):
+        return
+
+    db.add(
+        Invoice(
+            pme_id=pme_id,
+            invoice_number=invoice_number,
+            client_name=client_name,
+            subject=subject,
+            amount_ht=Decimal(amount_ht),
+            vat_rate=Decimal(vat_rate),
+            issue_date=issue_date,
+            due_date=due_date,
+            status=status,
+            notes=notes,
         ),
     )
 
@@ -150,6 +187,58 @@ def main() -> None:
             amount="249.00",
             expense_date=date(2026, 5, 20),
             created_by_name="Laura Petit",
+        )
+
+        create_invoice(
+            db,
+            pme_id=alpha.id,
+            invoice_number="FAC-2026-001",
+            client_name="Client Horizon",
+            subject="Accompagnement comptable mensuel",
+            amount_ht="1250.00",
+            vat_rate="21.00",
+            issue_date=date(2026, 5, 2),
+            due_date=date(2026, 6, 1),
+            status=InvoiceStatus.sent,
+            notes="Facture envoyee au client.",
+        )
+        create_invoice(
+            db,
+            pme_id=alpha.id,
+            invoice_number="FAC-2026-002",
+            client_name="Atelier Nord",
+            subject="Audit financier trimestriel",
+            amount_ht="2100.00",
+            vat_rate="21.00",
+            issue_date=date(2026, 5, 8),
+            due_date=date(2026, 6, 7),
+            status=InvoiceStatus.draft,
+        )
+        create_invoice(
+            db,
+            pme_id=beta.id,
+            invoice_number="FAC-2026-003",
+            client_name="Nova Services",
+            subject="Mission de conseil",
+            amount_ht="980.00",
+            vat_rate="21.00",
+            issue_date=date(2026, 4, 18),
+            due_date=date(2026, 5, 18),
+            status=InvoiceStatus.paid,
+            notes="Paiement recu.",
+        )
+        create_invoice(
+            db,
+            pme_id=gamma.id,
+            invoice_number="FAC-2026-004",
+            client_name="Retail Partner",
+            subject="Installation caisse et reporting",
+            amount_ht="1450.00",
+            vat_rate="21.00",
+            issue_date=date(2026, 4, 20),
+            due_date=date(2026, 5, 20),
+            status=InvoiceStatus.overdue,
+            notes="Relance a prevoir.",
         )
 
         db.commit()
