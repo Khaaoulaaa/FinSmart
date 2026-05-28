@@ -6,8 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
 from database import get_db, init_db
-from models import Expense, ExpenseStatus
-from schemas import ExpenseCreate, ExpenseDecision, ExpenseRead
+from models import Expense, ExpenseStatus, Pme, User
+from schemas import ExpenseCreate, ExpenseDecision, ExpenseRead, PmeRead, UserRead
 
 
 @asynccontextmanager
@@ -43,6 +43,21 @@ def read_root() -> dict[str, str]:
 @app.get("/health")
 def health_check() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.get("/pmes", response_model=list[PmeRead])
+def list_pmes(db: Session = Depends(get_db)) -> list[Pme]:
+    return db.query(Pme).order_by(Pme.name.asc()).all()
+
+
+@app.get("/users", response_model=list[UserRead])
+def list_users(role: str | None = None, db: Session = Depends(get_db)) -> list[User]:
+    query = db.query(User)
+
+    if role is not None:
+        query = query.filter(User.role == role)
+
+    return query.order_by(User.full_name.asc()).all()
 
 
 @app.post("/expenses", response_model=ExpenseRead, status_code=status.HTTP_201_CREATED)
