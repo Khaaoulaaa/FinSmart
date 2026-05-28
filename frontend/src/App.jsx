@@ -33,7 +33,7 @@ const demoUsers = [
   },
   {
     email: "comptable@expertise.be",
-    name: "Yassine Lambert",
+    name: "Sarah Martin",
     pme: "Expertise & Conseil",
     pme_id: 1,
     role: "comptable",
