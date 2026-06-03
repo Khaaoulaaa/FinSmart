@@ -1,7 +1,6 @@
 from collections.abc import Generator
 from time import sleep
 
-from sqlalchemy.exc import OperationalError
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker

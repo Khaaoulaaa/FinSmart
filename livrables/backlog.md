@@ -2,7 +2,7 @@
 
 ## Objectif du document
 
-Ce document presente la backlog mise a jour apres la fin du Sprint 1. Il indique les fonctionnalites terminees, celles reportees au Sprint 2, les nouvelles fonctionnalites identifiees et les elements qui ne seront pas traites dans l'immediat.
+Ce document presente la backlog mise a jour au 03/06/2026. Il indique les fonctionnalites terminees, celles en cours, les tests associes et les prochains tickets a traiter.
 
 ## Backlog mise a jour
 
@@ -22,16 +22,21 @@ Ce document presente la backlog mise a jour apres la fin du Sprint 1. Il indique
 | FS-12 | Tests unitaires depenses | Haute | Termine | Sprint 1 | Tests de creation, validation et blocage |
 | FS-13 | Conception de la fonctionnalite depenses | Haute | Termine | Sprint 1 | Document dans `docs/fonctionnalite-depenses.md` |
 | FS-14 | Configuration staging | Moyenne | Prepare | Sprint 1 / Sprint 2 | Docker Compose staging pret, VPS a configurer |
-| FS-15 | Frontend gestion des depenses | Haute | En cours avance | Sprint 1 / Sprint 2 | Interface React ajoutee, a tester avec API + PostgreSQL |
-| FS-16 | Authentification utilisateur | Haute | A faire | Sprint 2 | Necessaire pour securiser les roles |
-| FS-17 | Gestion des roles | Haute | A faire | Sprint 2 | Admin, Gerant PME, Comptable |
+| FS-15 | Frontend gestion des depenses | Haute | Termine | Sprint 1 / Sprint 2 | Interface React connectee a l'API avec creation, filtres et decisions |
+| FS-16 | Authentification utilisateur | Haute | En cours | Sprint 2 | Connexion demo cote frontend, securisation backend a finaliser |
+| FS-17 | Gestion des roles | Haute | En cours | Sprint 2 | Roles Admin, Gerant PME et Comptable presents dans les donnees de demo |
 | FS-18 | Protection des routes API | Haute | A faire | Sprint 2 | Restreindre validation/refus au Comptable |
 | FS-19 | Gestion des categories de depenses | Moyenne | A faire | Sprint 2 | Categories configurables par Admin |
 | FS-20 | Upload ou stockage des justificatifs | Moyenne | A faire | Sprint 2 | Actuellement lien `receipt_url` uniquement |
-| FS-21 | Facturation | Moyenne | A faire | Sprint 3 | Devis, factures, relances |
+| FS-21 | Facturation | Moyenne | En cours avance | Sprint 2 / Sprint 3 | Modele facture, endpoints API, interface React et donnees demo ajoutes |
 | FS-22 | Reporting | Moyenne | A faire | Sprint 3 | Indicateurs financiers et export |
 | FS-23 | Tresorerie | Basse | A faire | Sprint 4 | Previsionnel et rapprochement bancaire |
 | FS-24 | Export Excel | Basse | A faire | Sprint 4 | Export des donnees financieres |
+| FS-25 | Donnees de demonstration PostgreSQL | Haute | Termine | Sprint 2 | Script de seed avec PME, comptables, gerants, depenses et factures |
+| FS-26 | Endpoints PME et utilisateurs | Moyenne | Termine | Sprint 2 | `GET /pmes` et `GET /users` avec filtre par role |
+| FS-27 | Tests API facturation et referentiels | Haute | Termine | Sprint 2 | Tests Pytest sur factures, PME et utilisateurs |
+| FS-28 | Mise a jour dossier projet | Haute | En cours | Sprint 2 | Conception BDD/UML a aligner avec les modules facturation et utilisateurs |
+| FS-29 | Mise a jour dossier professionnel | Haute | En cours | Sprint 2 | Activite type 1 a finaliser, exemples activite type 2 a developper |
 
 ## Fonctionnalites ajoutees apres reflexion
 
@@ -41,17 +46,20 @@ Ces elements n'etaient pas forcement prevus au depart mais sont devenus necessai
 - ajout de CORS dans FastAPI pour connecter frontend et backend ;
 - ajout d'un fichier `docker-compose.staging.yml` pour preparer le staging ;
 - ajout d'un document de conception dedie aux depenses ;
-- ajout du controle CI frontend.
+- ajout du controle CI frontend ;
+- ajout d'une base de donnees de demonstration avec PME, utilisateurs, depenses et factures ;
+- ajout d'un premier module de facturation ;
+- ajout de tests backend sur les nouveaux endpoints.
 
 ## Fonctionnalites reportees
 
-Les fonctionnalites suivantes sont reportees au Sprint 2 :
+Les fonctionnalites suivantes restent a finaliser pendant le Sprint 2 :
 
-- authentification ;
-- gestion des roles ;
+- authentification backend ;
+- protection reelle des routes selon le role ;
 - securisation des endpoints ;
 - finalisation du test complet frontend + backend + PostgreSQL ;
-- deploiement reel sur VPS.
+- mise a jour continue des dossiers projet et professionnel.
 
 ## Fonctionnalites non retenues pour le moment
 
@@ -60,6 +68,19 @@ Les fonctionnalites suivantes ne sont pas supprimees definitivement, mais ne ser
 - rapprochement bancaire complet ;
 - generation comptable avancee ;
 - export Excel complet ;
-- module facturation complet ;
+- module facturation complet avec devis, relances et generation PDF ;
 - tableau de bord financier avance.
+
+## Suivi des tests associes
+
+| Zone testee | Type de test | Statut | Fichier |
+| --- | --- | --- | --- |
+| Creation d'une depense | Test API Pytest | Termine | `tests/test_expenses.py` |
+| Validation d'une depense | Test API Pytest | Termine | `tests/test_expenses.py` |
+| Blocage d'une depense deja traitee | Test API Pytest | Termine | `tests/test_expenses.py` |
+| Liste des PME | Test API Pytest | Termine | `tests/test_invoices_and_reference_data.py` |
+| Filtre des utilisateurs par role | Test API Pytest | Termine | `tests/test_invoices_and_reference_data.py` |
+| Creation d'une facture | Test API Pytest | Termine | `tests/test_invoices_and_reference_data.py` |
+| Filtre des factures par statut | Test API Pytest | Termine | `tests/test_invoices_and_reference_data.py` |
+| Validation des montants de facture | Test API Pytest | Termine | `tests/test_invoices_and_reference_data.py` |
 

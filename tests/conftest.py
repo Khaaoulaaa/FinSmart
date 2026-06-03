@@ -1,5 +1,9 @@
+import os
 import sys
 from pathlib import Path
+
+os.environ["DATABASE_URL"] = "sqlite+pysqlite:///:memory:"
+os.environ["ENVIRONMENT"] = "test"
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
