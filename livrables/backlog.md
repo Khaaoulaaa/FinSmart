@@ -2,7 +2,7 @@
 
 ## Objectif du document
 
-Ce document presente la backlog mise a jour au 03/06/2026. Il indique les fonctionnalites terminees, celles en cours, les tests associes et les prochains tickets a traiter.
+Ce document presente la backlog mise a jour au 04/06/2026. Il indique les fonctionnalites terminees, celles en cours, les tests associes et les prochains tickets a traiter.
 
 ## Backlog mise a jour
 
@@ -21,7 +21,7 @@ Ce document presente la backlog mise a jour au 03/06/2026. Il indique les foncti
 | FS-11 | Refus d'une depense | Haute | Termine | Sprint 1 | Endpoint `PATCH /expenses/{id}/reject` |
 | FS-12 | Tests unitaires depenses | Haute | Termine | Sprint 1 | Tests de creation, validation et blocage |
 | FS-13 | Conception de la fonctionnalite depenses | Haute | Termine | Sprint 1 | Document dans `docs/fonctionnalite-depenses.md` |
-| FS-14 | Configuration staging | Moyenne | Prepare | Sprint 1 / Sprint 2 | Docker Compose staging pret, VPS a configurer |
+| FS-14 | Configuration staging | Moyenne | En cours | Sprint 1 / Sprint 2 | Docker Compose staging et documentation prets, URL finale a ajouter |
 | FS-15 | Frontend gestion des depenses | Haute | Termine | Sprint 1 / Sprint 2 | Interface React connectee a l'API avec creation, filtres et decisions |
 | FS-16 | Authentification utilisateur | Haute | En cours | Sprint 2 | Connexion demo cote frontend, securisation backend a finaliser |
 | FS-17 | Gestion des roles | Haute | En cours | Sprint 2 | Roles Admin, Gerant PME et Comptable presents dans les donnees de demo |
@@ -37,6 +37,18 @@ Ce document presente la backlog mise a jour au 03/06/2026. Il indique les foncti
 | FS-27 | Tests API facturation et referentiels | Haute | Termine | Sprint 2 | Tests Pytest sur factures, PME et utilisateurs |
 | FS-28 | Mise a jour dossier projet | Haute | En cours | Sprint 2 | Conception BDD/UML a aligner avec les modules facturation et utilisateurs |
 | FS-29 | Mise a jour dossier professionnel | Haute | En cours | Sprint 2 | Activite type 1 a finaliser, exemples activite type 2 a developper |
+
+## Suivi des tickets GitHub
+
+| Ticket GitHub | Sujet | Statut actuel | Detail |
+| --- | --- | --- | --- |
+| [#1](https://github.com/Khaaoulaaa/FinSmart/issues/1) | Documentation et liens du projet | En cours avance | Liens dossiers et backlog ajoutes, URL finale de l'application encore a ajouter |
+| [#2](https://github.com/Khaaoulaaa/FinSmart/issues/2) | Authentification utilisateur | En cours | Connexion demo frontend faite, authentification backend a securiser |
+| [#4](https://github.com/Khaaoulaaa/FinSmart/issues/4) | Gestion des depenses | Termine | Ticket ferme, creation/liste/validation/refus et tests API faits |
+| [#8](https://github.com/Khaaoulaaa/FinSmart/issues/8) | Tests et validation fonctionnelle | En cours avance | 8 tests backend passent, tests frontend a ajouter si possible |
+| [#9](https://github.com/Khaaoulaaa/FinSmart/issues/9) | Deploiement de l'application | En cours | Workflow et documentation prets, URL publique a finaliser |
+| [#10](https://github.com/Khaaoulaaa/FinSmart/issues/10) | Corrections UI et responsive | En cours | Connexion, depenses et facturation avancees cote interface |
+| [#11](https://github.com/Khaaoulaaa/FinSmart/issues/11) | Module facturation clients | En cours avance | Modele, endpoints, interface, donnees demo et tests API ajoutes |
 
 ## Fonctionnalites ajoutees apres reflexion
 
