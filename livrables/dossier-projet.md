@@ -350,8 +350,22 @@ sequenceDiagram
     I-->>Comptable: Afficher le resultat
 ```
 
-## 18. Conclusion provisoire
+## 18. Avancement Sprint 2
 
-Le dossier projet contient maintenant la fin du contexte et le demarrage de la conception. Les diagrammes existants permettent de justifier la structure de la base de donnees et les premiers flux fonctionnels.
+Pendant le Sprint 2, le projet a evolue au-dela de la simple gestion des depenses. L'application integre maintenant un prototype plus complet avec :
 
-La suite du travail consiste a finaliser les diagrammes, ajouter l'authentification, securiser les roles et poursuivre le developpement de l'application.
+- une connexion demo cote backend avec l'endpoint `POST /auth/login` ;
+- des roles utilisateurs : `admin`, `gerant_pme`, `comptable` ;
+- une protection minimale des routes sensibles selon le role ;
+- un endpoint de categories de depenses utilise par le frontend ;
+- une base de donnees de demonstration avec PME, utilisateurs, depenses et factures ;
+- un module de facturation de base ;
+- 12 tests backend associes aux fonctionnalites principales.
+
+La securisation complete avec token, session et hash reel des mots de passe est identifiee comme une evolution de Sprint 3 ou de durcissement technique.
+
+## 19. Conclusion provisoire
+
+Le dossier projet contient maintenant la fin du contexte, le demarrage de la conception et l'avancement du Sprint 2. Les diagrammes existants permettent de justifier la structure de la base de donnees et les premiers flux fonctionnels.
+
+La suite du travail consiste a finaliser les diagrammes avec la facturation, renforcer l'authentification et demarrer le reporting financier du Sprint 3.

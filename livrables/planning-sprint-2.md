@@ -72,3 +72,20 @@ Le Sprint 2 sera considere comme termine si :
 - la documentation est mise a jour ;
 - le staging est teste ou documente avec preuves de tentative.
 
+## Etat de cloture
+
+Le Sprint 2 est cloture pour le prototype au 04/06/2026.
+
+| Critere | Etat | Commentaire |
+| --- | --- | --- |
+| Frontend connecte au backend | Valide | React consomme les endpoints FastAPI |
+| Roles utilisateurs | Valide | Admin, Gerant PME et Comptable presents |
+| Authentification simple | Valide | Endpoint `POST /auth/login` ajoute |
+| Routes sensibles protegees | Valide pour prototype | Controle par role avec header demo `X-User-Email` |
+| Tests associes | Valide | 12 tests backend passent |
+| Build frontend | Valide | `npm run build` passe |
+| Documentation | Valide | Backlog et bilan Sprint 2 mis a jour |
+| Staging/deploiement | Documente | Configuration et documentation disponibles, URL finale a stabiliser |
+
+Les elements de securite production, comme le token, la session et le hash reel des mots de passe, sont reportes vers le Sprint 3 ou une phase de durcissement.
+
