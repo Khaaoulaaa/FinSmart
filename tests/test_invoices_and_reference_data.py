@@ -6,11 +6,52 @@ from models import Pme, User, UserRole
 
 
 client = TestClient(app)
+GERANT_HEADERS = {"X-User-Email": "gerant@example.be"}
+COMPTABLE_HEADERS = {"X-User-Email": "comptable@example.be"}
 
 
 def setup_function() -> None:
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
+    with SessionLocal() as db:
+        db.add(
+            User(
+                full_name="Gerant PME",
+                email="gerant@example.be",
+                password_hash="demo",
+                role=UserRole.gerant_pme,
+            )
+        )
+        db.add(
+            User(
+                full_name="Comptable",
+                email="comptable@example.be",
+                password_hash="demo",
+                role=UserRole.comptable,
+            )
+        )
+        db.commit()
+
+
+def test_login_returns_user_role() -> None:
+    response = client.post(
+        "/auth/login",
+        json={"email": "comptable@example.be", "password": "demo1234"},
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["email"] == "comptable@example.be"
+    assert data["role"] == "comptable"
+
+
+def test_login_rejects_invalid_password() -> None:
+    response = client.post(
+        "/auth/login",
+        json={"email": "comptable@example.be", "password": "wrong-password"},
+    )
+
+    assert response.status_code == 401
 
 
 def test_list_pmes_returns_database_companies() -> None:
@@ -50,14 +91,14 @@ def test_list_users_can_filter_by_role() -> None:
 
     assert response.status_code == 200
     data = response.json()
-    assert len(data) == 1
-    assert data[0]["full_name"] == "Sarah Martin"
-    assert data[0]["role"] == "comptable"
+    assert all(user["role"] == "comptable" for user in data)
+    assert "Sarah Martin" in {user["full_name"] for user in data}
 
 
 def test_list_expense_categories_includes_defaults_and_usage_count() -> None:
     client.post(
         "/expenses",
+        headers=GERANT_HEADERS,
         json={
             "pme_id": 1,
             "title": "Licence CRM",
@@ -69,6 +110,7 @@ def test_list_expense_categories_includes_defaults_and_usage_count() -> None:
     )
     client.post(
         "/expenses",
+        headers=GERANT_HEADERS,
         json={
             "pme_id": 1,
             "title": "Train client",
@@ -91,6 +133,7 @@ def test_list_expense_categories_includes_defaults_and_usage_count() -> None:
 def test_create_invoice() -> None:
     response = client.post(
         "/invoices",
+        headers=COMPTABLE_HEADERS,
         json={
             "pme_id": 1,
             "invoice_number": "FAC-2026-TEST",
@@ -137,7 +180,7 @@ def test_list_invoices_can_filter_by_status() -> None:
     ]
 
     for invoice in invoices:
-        client.post("/invoices", json=invoice)
+        client.post("/invoices", headers=COMPTABLE_HEADERS, json=invoice)
 
     response = client.get("/invoices", params={"status_filter": "paid"})
 
@@ -150,6 +193,7 @@ def test_list_invoices_can_filter_by_status() -> None:
 def test_create_invoice_rejects_negative_amount() -> None:
     response = client.post(
         "/invoices",
+        headers=COMPTABLE_HEADERS,
         json={
             "pme_id": 1,
             "invoice_number": "FAC-2026-INVALID",
@@ -163,3 +207,22 @@ def test_create_invoice_rejects_negative_amount() -> None:
     )
 
     assert response.status_code == 422
+
+
+def test_invoice_creation_requires_comptable_or_admin_role() -> None:
+    response = client.post(
+        "/invoices",
+        headers=GERANT_HEADERS,
+        json={
+            "pme_id": 1,
+            "invoice_number": "FAC-2026-FORBIDDEN",
+            "client_name": "Client Test",
+            "subject": "Role interdit",
+            "amount_ht": "50.00",
+            "issue_date": "2026-05-20",
+            "due_date": "2026-06-20",
+            "status": "draft",
+        },
+    )
+
+    assert response.status_code == 403

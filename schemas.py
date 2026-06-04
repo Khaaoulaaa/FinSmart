@@ -30,6 +30,11 @@ class ExpenseCategoryRead(BaseModel):
     usage_count: int
 
 
+class LoginRequest(BaseModel):
+    email: str = Field(..., min_length=5, max_length=120)
+    password: str = Field(..., min_length=4, max_length=100)
+
+
 class ExpenseCreate(BaseModel):
     pme_id: int = Field(..., ge=1)
     title: str = Field(..., min_length=3, max_length=150)

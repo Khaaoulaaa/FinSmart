@@ -5,21 +5,43 @@ os.environ["ENVIRONMENT"] = "test"
 
 from fastapi.testclient import TestClient  # noqa: E402
 
-from database import Base, engine  # noqa: E402
+from database import Base, SessionLocal, engine  # noqa: E402
 from main import app  # noqa: E402
+from models import User, UserRole  # noqa: E402
 
 
 client = TestClient(app)
+GERANT_HEADERS = {"X-User-Email": "gerant@example.be"}
+COMPTABLE_HEADERS = {"X-User-Email": "comptable@example.be"}
 
 
 def setup_function() -> None:
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
+    with SessionLocal() as db:
+        db.add(
+            User(
+                full_name="Gerant PME",
+                email="gerant@example.be",
+                password_hash="demo",
+                role=UserRole.gerant_pme,
+            )
+        )
+        db.add(
+            User(
+                full_name="Comptable",
+                email="comptable@example.be",
+                password_hash="demo",
+                role=UserRole.comptable,
+            )
+        )
+        db.commit()
 
 
 def test_create_expense() -> None:
     response = client.post(
         "/expenses",
+        headers=GERANT_HEADERS,
         json={
             "pme_id": 1,
             "title": "Achat fournitures",
@@ -42,6 +64,7 @@ def test_create_expense() -> None:
 def test_approve_expense() -> None:
     created = client.post(
         "/expenses",
+        headers=GERANT_HEADERS,
         json={
             "pme_id": 1,
             "title": "Abonnement logiciel",
@@ -54,6 +77,7 @@ def test_approve_expense() -> None:
 
     response = client.patch(
         f"/expenses/{created['id']}/approve",
+        headers=COMPTABLE_HEADERS,
         json={
             "decision_by_name": "Comptable",
             "comment": "Depense conforme",
@@ -70,6 +94,7 @@ def test_approve_expense() -> None:
 def test_reject_already_processed_expense() -> None:
     created = client.post(
         "/expenses",
+        headers=GERANT_HEADERS,
         json={
             "pme_id": 1,
             "title": "Restaurant client",
@@ -82,6 +107,7 @@ def test_reject_already_processed_expense() -> None:
 
     client.patch(
         f"/expenses/{created['id']}/approve",
+        headers=COMPTABLE_HEADERS,
         json={
             "decision_by_name": "Comptable",
             "comment": "OK",
@@ -90,6 +116,7 @@ def test_reject_already_processed_expense() -> None:
 
     response = client.patch(
         f"/expenses/{created['id']}/reject",
+        headers=COMPTABLE_HEADERS,
         json={
             "decision_by_name": "Comptable",
             "comment": "Refus impossible",

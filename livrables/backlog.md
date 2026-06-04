@@ -23,9 +23,9 @@ Ce document presente la backlog mise a jour au 04/06/2026. Il indique les foncti
 | FS-13 | Conception de la fonctionnalite depenses | Haute | Termine | Sprint 1 | Document dans `docs/fonctionnalite-depenses.md` |
 | FS-14 | Configuration staging | Moyenne | En cours | Sprint 1 / Sprint 2 | Docker Compose staging et documentation prets, URL finale a ajouter |
 | FS-15 | Frontend gestion des depenses | Haute | Termine | Sprint 1 / Sprint 2 | Interface React connectee a l'API avec creation, filtres et decisions |
-| FS-16 | Authentification utilisateur | Haute | En cours | Sprint 2 | Connexion demo cote frontend, securisation backend a finaliser |
+| FS-16 | Authentification utilisateur | Haute | En cours avance | Sprint 2 | Endpoint `POST /auth/login` ajoute, version demo sans token a renforcer |
 | FS-17 | Gestion des roles | Haute | En cours | Sprint 2 | Roles Admin, Gerant PME et Comptable presents dans les donnees de demo |
-| FS-18 | Protection des routes API | Haute | A faire | Sprint 2 | Restreindre validation/refus au Comptable |
+| FS-18 | Protection des routes API | Haute | En cours avance | Sprint 2 | Creation depense, validation/refus et facturation proteges par role via header demo |
 | FS-19 | Gestion des categories de depenses | Moyenne | Termine | Sprint 2 | Categories principales exposees par l'API et utilisees dans le formulaire React |
 | FS-20 | Upload ou stockage des justificatifs | Moyenne | A faire | Sprint 2 | Actuellement lien `receipt_url` uniquement |
 | FS-21 | Facturation | Moyenne | En cours avance | Sprint 2 / Sprint 3 | Modele facture, endpoints API, interface React et donnees demo ajoutes |
@@ -43,10 +43,10 @@ Ce document presente la backlog mise a jour au 04/06/2026. Il indique les foncti
 | Ticket GitHub | Sujet | Statut actuel | Detail |
 | --- | --- | --- | --- |
 | [#1](https://github.com/Khaaoulaaa/FinSmart/issues/1) | Documentation et liens du projet | En cours avance | Liens dossiers et backlog ajoutes, URL finale de l'application encore a ajouter |
-| [#2](https://github.com/Khaaoulaaa/FinSmart/issues/2) | Authentification utilisateur | En cours | Connexion demo frontend faite, authentification backend a securiser |
+| [#2](https://github.com/Khaaoulaaa/FinSmart/issues/2) | Authentification utilisateur | En cours avance | Login backend demo et protections par role ajoutes, token a finaliser |
 | [#4](https://github.com/Khaaoulaaa/FinSmart/issues/4) | Gestion des depenses | Termine | Ticket ferme, creation/liste/validation/refus et tests API faits |
 | [#7](https://github.com/Khaaoulaaa/FinSmart/issues/7) | Categories de depenses | Termine | Ticket ferme, endpoint categories et select frontend faits |
-| [#8](https://github.com/Khaaoulaaa/FinSmart/issues/8) | Tests et validation fonctionnelle | En cours avance | 8 tests backend passent, tests frontend a ajouter si possible |
+| [#8](https://github.com/Khaaoulaaa/FinSmart/issues/8) | Tests et validation fonctionnelle | En cours avance | 12 tests backend passent, tests frontend a ajouter si possible |
 | [#9](https://github.com/Khaaoulaaa/FinSmart/issues/9) | Deploiement de l'application | En cours | Workflow et documentation prets, URL publique a finaliser |
 | [#10](https://github.com/Khaaoulaaa/FinSmart/issues/10) | Corrections UI et responsive | En cours | Connexion, depenses et facturation avancees cote interface |
 | [#11](https://github.com/Khaaoulaaa/FinSmart/issues/11) | Module facturation clients | En cours avance | Modele, endpoints, interface, donnees demo et tests API ajoutes |
@@ -70,8 +70,9 @@ Ces elements n'etaient pas forcement prevus au depart mais sont devenus necessai
 Les fonctionnalites suivantes restent a finaliser pendant le Sprint 2 :
 
 - authentification backend ;
-- protection reelle des routes selon le role ;
-- securisation des endpoints ;
+- authentification avec token ou session ;
+- hash et verification reelle des mots de passe ;
+- securisation complete des endpoints ;
 - finalisation du test complet frontend + backend + PostgreSQL ;
 - mise a jour continue des dossiers projet et professionnel.
 
@@ -98,4 +99,7 @@ Les fonctionnalites suivantes ne sont pas supprimees definitivement, mais ne ser
 | Filtre des factures par statut | Test API Pytest | Termine | `tests/test_invoices_and_reference_data.py` |
 | Validation des montants de facture | Test API Pytest | Termine | `tests/test_invoices_and_reference_data.py` |
 | Liste des categories de depenses | Test API Pytest | Termine | `tests/test_invoices_and_reference_data.py` |
+| Connexion backend demo | Test API Pytest | Termine | `tests/test_invoices_and_reference_data.py` |
+| Refus d'un mauvais mot de passe | Test API Pytest | Termine | `tests/test_invoices_and_reference_data.py` |
+| Protection role facturation | Test API Pytest | Termine | `tests/test_invoices_and_reference_data.py` |
 

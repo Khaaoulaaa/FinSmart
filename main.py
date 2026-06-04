@@ -1,13 +1,13 @@
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Callable
 from contextlib import asynccontextmanager
 
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, Header, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from database import get_db, init_db
-from models import Expense, ExpenseStatus, Invoice, InvoiceStatus, Pme, User
+from models import Expense, ExpenseStatus, Invoice, InvoiceStatus, Pme, User, UserRole
 from schemas import (
     ExpenseCategoryRead,
     ExpenseCreate,
@@ -15,12 +15,36 @@ from schemas import (
     ExpenseRead,
     InvoiceCreate,
     InvoiceRead,
+    LoginRequest,
     PmeRead,
     UserRead,
 )
 
 
 DEFAULT_EXPENSE_CATEGORIES = ["Fournitures", "Logiciel", "Transport", "Reception", "Autre"]
+DEMO_PASSWORD = "demo1234"
+
+
+def get_current_user(x_user_email: str | None = Header(default=None), db: Session = Depends(get_db)) -> User:
+    if x_user_email is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Utilisateur non authentifie")
+
+    user = db.query(User).filter(User.email == x_user_email).one_or_none()
+
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Utilisateur inconnu")
+
+    return user
+
+
+def require_roles(*allowed_roles: UserRole) -> Callable[[User], User]:
+    def role_dependency(current_user: User = Depends(get_current_user)) -> User:
+        if current_user.role not in allowed_roles:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Action non autorisee pour ce role")
+
+        return current_user
+
+    return role_dependency
 
 
 @asynccontextmanager
@@ -58,6 +82,16 @@ def health_check() -> dict[str, str]:
     return {"status": "ok"}
 
 
+@app.post("/auth/login", response_model=UserRead)
+def login(credentials: LoginRequest, db: Session = Depends(get_db)) -> User:
+    user = db.query(User).filter(User.email == credentials.email).one_or_none()
+
+    if user is None or credentials.password != DEMO_PASSWORD:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Identifiants invalides")
+
+    return user
+
+
 @app.get("/pmes", response_model=list[PmeRead])
 def list_pmes(db: Session = Depends(get_db)) -> list[Pme]:
     return db.query(Pme).order_by(Pme.name.asc()).all()
@@ -91,7 +125,11 @@ def list_expense_categories(db: Session = Depends(get_db)) -> list[ExpenseCatego
 
 
 @app.post("/invoices", response_model=InvoiceRead, status_code=status.HTTP_201_CREATED)
-def create_invoice(invoice_data: InvoiceCreate, db: Session = Depends(get_db)) -> Invoice:
+def create_invoice(
+    invoice_data: InvoiceCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_roles(UserRole.comptable, UserRole.admin)),
+) -> Invoice:
     invoice = Invoice(**invoice_data.model_dump())
     db.add(invoice)
     db.commit()
@@ -117,10 +155,14 @@ def list_invoices(
 
 
 @app.post("/expenses", response_model=ExpenseRead, status_code=status.HTTP_201_CREATED)
-def create_expense(expense_data: ExpenseCreate, db: Session = Depends(get_db)) -> Expense:
+def create_expense(
+    expense_data: ExpenseCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_roles(UserRole.gerant_pme, UserRole.admin)),
+) -> Expense:
     expense = Expense(
         **expense_data.model_dump(),
-        created_by_role="gerant_pme",
+        created_by_role=current_user.role.value,
     )
     db.add(expense)
     db.commit()
@@ -160,6 +202,7 @@ def approve_expense(
     expense_id: int,
     decision: ExpenseDecision,
     db: Session = Depends(get_db),
+    current_user: User = Depends(require_roles(UserRole.comptable, UserRole.admin)),
 ) -> Expense:
     expense = db.get(Expense, expense_id)
 
@@ -170,7 +213,7 @@ def approve_expense(
         raise HTTPException(status_code=400, detail="La depense a deja ete traitee")
 
     expense.status = ExpenseStatus.approved
-    expense.decision_by_role = "comptable"
+    expense.decision_by_role = current_user.role.value
     expense.decision_by_name = decision.decision_by_name
     expense.decision_comment = decision.comment
     db.commit()
@@ -183,6 +226,7 @@ def reject_expense(
     expense_id: int,
     decision: ExpenseDecision,
     db: Session = Depends(get_db),
+    current_user: User = Depends(require_roles(UserRole.comptable, UserRole.admin)),
 ) -> Expense:
     expense = db.get(Expense, expense_id)
 
@@ -193,7 +237,7 @@ def reject_expense(
         raise HTTPException(status_code=400, detail="La depense a deja ete traitee")
 
     expense.status = ExpenseStatus.rejected
-    expense.decision_by_role = "comptable"
+    expense.decision_by_role = current_user.role.value
     expense.decision_by_name = decision.decision_by_name
     expense.decision_comment = decision.comment
     db.commit()

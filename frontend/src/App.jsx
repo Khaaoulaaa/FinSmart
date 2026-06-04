@@ -266,7 +266,7 @@ function App() {
     setLoginError("");
   }
 
-  function login(event) {
+  async function login(event) {
     event.preventDefault();
 
     if (loginForm.password.trim().length < 4) {
@@ -281,7 +281,29 @@ function App() {
       return;
     }
 
-    setCurrentUser(user);
+    try {
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginForm),
+      });
+
+      if (!response.ok) {
+        throw new Error("Identifiants invalides cote backend.");
+      }
+
+      const apiUser = await response.json();
+      setCurrentUser({
+        ...user,
+        name: apiUser.full_name,
+        pme_id: apiUser.pme_id ?? user.pme_id,
+        role: apiUser.role,
+      });
+    } catch (requestError) {
+      setLoginError(requestError.message);
+      return;
+    }
+
     setForm((currentForm) => ({
       ...currentForm,
       pme_id: user.pme_id,
@@ -315,6 +337,10 @@ function App() {
     setInvoiceForm((currentForm) => ({ ...currentForm, [name]: value }));
   }
 
+  function getAuthHeaders() {
+    return { "Content-Type": "application/json", "X-User-Email": currentUser.email };
+  }
+
   async function createExpense(event) {
     event.preventDefault();
 
@@ -338,7 +364,7 @@ function App() {
     try {
       const response = await fetch(`${API_URL}/expenses`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify(payload),
       });
 
@@ -368,7 +394,7 @@ function App() {
     try {
       const response = await fetch(`${API_URL}/expenses/${expenseId}/${action}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ decision_by_name: currentUser.name, comment }),
       });
 
@@ -405,7 +431,7 @@ function App() {
     try {
       const response = await fetch(`${API_URL}/invoices`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify(payload),
       });
 
