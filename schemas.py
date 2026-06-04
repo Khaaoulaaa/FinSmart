@@ -25,6 +25,11 @@ class UserRead(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class ExpenseCategoryRead(BaseModel):
+    name: str
+    usage_count: int
+
+
 class ExpenseCreate(BaseModel):
     pme_id: int = Field(..., ge=1)
     title: str = Field(..., min_length=3, max_length=150)

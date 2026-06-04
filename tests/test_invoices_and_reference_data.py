@@ -55,6 +55,39 @@ def test_list_users_can_filter_by_role() -> None:
     assert data[0]["role"] == "comptable"
 
 
+def test_list_expense_categories_includes_defaults_and_usage_count() -> None:
+    client.post(
+        "/expenses",
+        json={
+            "pme_id": 1,
+            "title": "Licence CRM",
+            "category": "Logiciel",
+            "amount": "49.99",
+            "expense_date": "2026-05-15",
+            "created_by_name": "Nadia Benali",
+        },
+    )
+    client.post(
+        "/expenses",
+        json={
+            "pme_id": 1,
+            "title": "Train client",
+            "category": "Transport",
+            "amount": "35.50",
+            "expense_date": "2026-05-16",
+            "created_by_name": "Nadia Benali",
+        },
+    )
+
+    response = client.get("/expense-categories")
+
+    assert response.status_code == 200
+    categories = {category["name"]: category["usage_count"] for category in response.json()}
+    assert categories["Fournitures"] == 0
+    assert categories["Logiciel"] == 1
+    assert categories["Transport"] == 1
+
+
 def test_create_invoice() -> None:
     response = client.post(
         "/invoices",

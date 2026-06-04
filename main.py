@@ -3,11 +3,24 @@ from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from database import get_db, init_db
 from models import Expense, ExpenseStatus, Invoice, InvoiceStatus, Pme, User
-from schemas import ExpenseCreate, ExpenseDecision, ExpenseRead, InvoiceCreate, InvoiceRead, PmeRead, UserRead
+from schemas import (
+    ExpenseCategoryRead,
+    ExpenseCreate,
+    ExpenseDecision,
+    ExpenseRead,
+    InvoiceCreate,
+    InvoiceRead,
+    PmeRead,
+    UserRead,
+)
+
+
+DEFAULT_EXPENSE_CATEGORIES = ["Fournitures", "Logiciel", "Transport", "Reception", "Autre"]
 
 
 @asynccontextmanager
@@ -58,6 +71,23 @@ def list_users(role: str | None = None, db: Session = Depends(get_db)) -> list[U
         query = query.filter(User.role == role)
 
     return query.order_by(User.full_name.asc()).all()
+
+
+@app.get("/expense-categories", response_model=list[ExpenseCategoryRead])
+def list_expense_categories(db: Session = Depends(get_db)) -> list[ExpenseCategoryRead]:
+    category_rows = (
+        db.query(Expense.category, func.count(Expense.id))
+        .group_by(Expense.category)
+        .order_by(Expense.category.asc())
+        .all()
+    )
+    usage_by_category = {category: count for category, count in category_rows}
+    category_names = sorted(set(DEFAULT_EXPENSE_CATEGORIES) | set(usage_by_category))
+
+    return [
+        ExpenseCategoryRead(name=category_name, usage_count=usage_by_category.get(category_name, 0))
+        for category_name in category_names
+    ]
 
 
 @app.post("/invoices", response_model=InvoiceRead, status_code=status.HTTP_201_CREATED)

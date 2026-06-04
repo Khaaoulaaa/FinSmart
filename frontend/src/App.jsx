@@ -70,6 +70,8 @@ const initialForm = {
   created_by_name: "",
 };
 
+const fallbackExpenseCategories = ["Fournitures", "Logiciel", "Transport", "Reception", "Autre"];
+
 const initialInvoiceForm = {
   pme_id: 1,
   invoice_number: "",
@@ -127,6 +129,7 @@ function App() {
   const [activeView, setActiveView] = useState("expenses");
   const [expenses, setExpenses] = useState([]);
   const [invoices, setInvoices] = useState([]);
+  const [expenseCategories, setExpenseCategories] = useState(fallbackExpenseCategories);
   const [form, setForm] = useState(initialForm);
   const [invoiceForm, setInvoiceForm] = useState(initialInvoiceForm);
   const [statusFilter, setStatusFilter] = useState("all");
@@ -228,12 +231,29 @@ function App() {
     }
   }, []);
 
+  const loadExpenseCategories = useCallback(async () => {
+    try {
+      const response = await fetch(`${API_URL}/expense-categories`);
+
+      if (!response.ok) {
+        throw new Error("Impossible de charger les categories");
+      }
+
+      const data = await response.json();
+      const categoryNames = data.map((category) => category.name);
+      setExpenseCategories(categoryNames.length > 0 ? categoryNames : fallbackExpenseCategories);
+    } catch {
+      setExpenseCategories(fallbackExpenseCategories);
+    }
+  }, []);
+
   useEffect(() => {
     if (currentUser) {
+      loadExpenseCategories();
       loadExpenses();
       loadInvoices();
     }
-  }, [currentUser, loadExpenses, loadInvoices]);
+  }, [currentUser, loadExpenseCategories, loadExpenses, loadInvoices]);
 
   function updateLoginForm(event) {
     const { name, value } = event.target;
@@ -611,11 +631,9 @@ function App() {
               <label>
                 Categorie
                 <select name="category" value={form.category} onChange={updateForm} disabled={!canCreateExpense}>
-                  <option>Fournitures</option>
-                  <option>Logiciel</option>
-                  <option>Transport</option>
-                  <option>Reception</option>
-                  <option>Autre</option>
+                  {expenseCategories.map((category) => (
+                    <option key={category}>{category}</option>
+                  ))}
                 </select>
               </label>
               <label>

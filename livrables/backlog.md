@@ -26,7 +26,7 @@ Ce document presente la backlog mise a jour au 04/06/2026. Il indique les foncti
 | FS-16 | Authentification utilisateur | Haute | En cours | Sprint 2 | Connexion demo cote frontend, securisation backend a finaliser |
 | FS-17 | Gestion des roles | Haute | En cours | Sprint 2 | Roles Admin, Gerant PME et Comptable presents dans les donnees de demo |
 | FS-18 | Protection des routes API | Haute | A faire | Sprint 2 | Restreindre validation/refus au Comptable |
-| FS-19 | Gestion des categories de depenses | Moyenne | A faire | Sprint 2 | Categories configurables par Admin |
+| FS-19 | Gestion des categories de depenses | Moyenne | Termine | Sprint 2 | Categories principales exposees par l'API et utilisees dans le formulaire React |
 | FS-20 | Upload ou stockage des justificatifs | Moyenne | A faire | Sprint 2 | Actuellement lien `receipt_url` uniquement |
 | FS-21 | Facturation | Moyenne | En cours avance | Sprint 2 / Sprint 3 | Modele facture, endpoints API, interface React et donnees demo ajoutes |
 | FS-22 | Reporting | Moyenne | A faire | Sprint 3 | Indicateurs financiers et export |
@@ -45,6 +45,7 @@ Ce document presente la backlog mise a jour au 04/06/2026. Il indique les foncti
 | [#1](https://github.com/Khaaoulaaa/FinSmart/issues/1) | Documentation et liens du projet | En cours avance | Liens dossiers et backlog ajoutes, URL finale de l'application encore a ajouter |
 | [#2](https://github.com/Khaaoulaaa/FinSmart/issues/2) | Authentification utilisateur | En cours | Connexion demo frontend faite, authentification backend a securiser |
 | [#4](https://github.com/Khaaoulaaa/FinSmart/issues/4) | Gestion des depenses | Termine | Ticket ferme, creation/liste/validation/refus et tests API faits |
+| [#7](https://github.com/Khaaoulaaa/FinSmart/issues/7) | Categories de depenses | Termine | Ticket ferme, endpoint categories et select frontend faits |
 | [#8](https://github.com/Khaaoulaaa/FinSmart/issues/8) | Tests et validation fonctionnelle | En cours avance | 8 tests backend passent, tests frontend a ajouter si possible |
 | [#9](https://github.com/Khaaoulaaa/FinSmart/issues/9) | Deploiement de l'application | En cours | Workflow et documentation prets, URL publique a finaliser |
 | [#10](https://github.com/Khaaoulaaa/FinSmart/issues/10) | Corrections UI et responsive | En cours | Connexion, depenses et facturation avancees cote interface |
@@ -61,7 +62,8 @@ Ces elements n'etaient pas forcement prevus au depart mais sont devenus necessai
 - ajout du controle CI frontend ;
 - ajout d'une base de donnees de demonstration avec PME, utilisateurs, depenses et factures ;
 - ajout d'un premier module de facturation ;
-- ajout de tests backend sur les nouveaux endpoints.
+- ajout de tests backend sur les nouveaux endpoints ;
+- ajout d'un endpoint pour les categories de depenses utilise par le frontend.
 
 ## Fonctionnalites reportees
 
@@ -95,4 +97,5 @@ Les fonctionnalites suivantes ne sont pas supprimees definitivement, mais ne ser
 | Creation d'une facture | Test API Pytest | Termine | `tests/test_invoices_and_reference_data.py` |
 | Filtre des factures par statut | Test API Pytest | Termine | `tests/test_invoices_and_reference_data.py` |
 | Validation des montants de facture | Test API Pytest | Termine | `tests/test_invoices_and_reference_data.py` |
+| Liste des categories de depenses | Test API Pytest | Termine | `tests/test_invoices_and_reference_data.py` |
 
