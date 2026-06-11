@@ -1,18 +1,5 @@
 # Dossier projet - FinSmart Pro
 
-## Cadre de certification
-
-Ce dossier projet est prepare dans le cadre du titre professionnel **Concepteur developpeur d'applications**, niveau 6, enregistre sous le code **RNCP37873**.
-
-Reference officielle : [France competences - RNCP37873](https://www.francecompetences.fr/recherche/rncp/37873/).
-
-Le titre est organise en trois blocs de competences :
-
-- `RNCP37873BC01` : developper une application securisee ;
-- `RNCP37873BC02` : concevoir et developper une application securisee organisee en couches ;
-- `RNCP37873BC03` : preparer le deploiement d'une application securisee.
-
-Le projet FinSmart Pro apporte des preuves pour ces trois blocs. Certaines competences, notamment l'acces NoSQL et l'authentification de niveau production, ne sont pas encore totalement couvertes et sont identifiees comme des axes d'amelioration.
 
 ## 1. Introduction
 
