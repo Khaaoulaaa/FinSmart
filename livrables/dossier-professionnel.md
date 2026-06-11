@@ -1,373 +1,355 @@
-# Dossier professionnel - FinSmart Pro
+# Dossier professionnel - Khaoula Adodi
 
-## Informations personnelles
+## 1. Informations personnelles
 
 | Element | Information |
 | --- | --- |
 | Nom | Khaoula Adodi |
 | Organisme de formation | Ecole IT |
-| Titre prepare | Concepteur developpeur d'applications - niveau 6 |
-| Reference | RNCP37873 |
+| Formation | Bachelor Concepteur Developpeur d'Applications Full-Stack |
+| Niveau prepare | Niveau 6 - Bac+3 |
+| Certification | RNCP37873 |
+| Experience actuelle | Data Steward / Data Analyst freelance chez Veeva |
+| Debut de l'experience | Janvier 2026 |
 
-## Parcours professionnel
+## 2. Presentation personnelle
 
-Depuis janvier 2026, je travaille en freelance comme **Data Steward / Data Analyst chez Veeva**. Cette experience me permet de developper des competences dans la gestion, le controle et l'analyse de donnees.
+Je m'appelle Khaoula Adodi. Je suis actuellement en formation a Ecole IT afin de preparer le titre professionnel de Concepteur Developpeur d'Applications, niveau 6.
 
-En parallele, j'ai participe a plusieurs projets realises dans le cadre de ma formation a Ecole IT. Le projet FinSmart Pro constitue le principal support utilise dans ce dossier pour presenter mes competences en conception et developpement d'applications.
+Je souhaite developper une double competence en developpement d'applications et en gestion de donnees. Mon parcours me permet de travailler sur la programmation, les bases de donnees, la conception d'applications, les tests et le deploiement.
 
-## 1. Presentation du contexte professionnel
+Depuis janvier 2026, je travaille egalement en freelance comme Data Steward / Data Analyst chez Veeva. Cette experience me permet de renforcer ma rigueur, mon autonomie et ma capacite a travailler avec des donnees dans un environnement professionnel.
 
-Le projet FinSmart Pro est une application web SaaS destinee aux PME. Il est realise pour le cabinet fictif **Expertise & Conseil**, qui souhaite aider ses clients a mieux suivre leurs depenses, leur tresorerie et leurs informations financieres.
+## 3. Mon parcours de formation
 
-Dans le cadre du dossier professionnel, ce projet permet de presenter des situations concretes de conception, de developpement frontend, de developpement backend, de gestion de base de donnees, de tests et de deploiement.
+Le Bachelor Concepteur Developpeur d'Applications d'Ecole IT se deroule sur trois ans. La progression commence par les fondamentaux du developpement, puis aborde les frameworks, les API et les bases de donnees avancees avant de traiter l'architecture, la securite et la performance des applications.
 
-## 2. Role tenu dans le projet
+Source du programme : [Ecole IT - Bachelor Developpeur d'Applications](https://ecole-it.com/formations/bachelor-developpeur-dapplications-cda/).
 
-Mon role consiste a participer a la conception et au developpement de l'application FinSmart Pro.
+## 4. Premiere annee - Acquisition des fondamentaux
 
-Les missions realisees ou demarrees sont :
+La premiere annee permet d'acquerir les bases necessaires pour comprendre le fonctionnement d'une application web et commencer a programmer.
 
-- analyser le besoin fonctionnel ;
-- rediger le contexte projet ;
-- preparer les diagrammes de conception ;
-- developper une interface web React ;
-- developper une API FastAPI ;
-- modeliser les donnees ;
-- mettre en place des tests ;
-- documenter le projet ;
-- suivre les taches avec GitHub Issues.
+### Developpement web et frontend
 
-## 3. Bloc 1 - Developper une application securisee
+Les enseignements portent sur :
 
-### 3.1 Objectif de l'activite
+- la creation de pages web avec HTML et CSS ;
+- le fonctionnement du navigateur et du DOM ;
+- la creation d'interfaces simples ;
+- les bases de l'interactivite avec JavaScript ;
+- les principes du responsive design.
 
-L'objectif de cette activite est de construire une interface utilisateur claire, responsive et exploitable. Dans FinSmart Pro, cette interface permet au gerant PME de declarer une depense et au comptable de consulter les depenses pour les valider ou les refuser.
+Ces enseignements me permettent de comprendre la structure d'une page web, de separer le contenu de la presentation et d'ajouter des interactions simples.
 
-### 3.2 Exemple 1 - Interface de gestion des depenses
+### Developpement backend
 
-#### Contexte
+La premiere annee comprend egalement :
 
-Le gerant PME doit pouvoir saisir rapidement une depense avec les informations principales : libelle, montant, date, categorie, commentaire et justificatif.
+- l'apprentissage de la programmation avec Python ;
+- les variables, conditions, boucles et fonctions ;
+- les bases de la programmation orientee objet ;
+- la creation de scripts ;
+- une introduction aux API et aux architectures d'applications.
 
-#### Travail realise
+Cette partie m'aide a developper ma logique algorithmique et a organiser mon code.
 
-J'ai mis en place une interface React avec :
+### Bases de donnees et data
 
-- un formulaire de creation de depense ;
-- une liste des depenses ;
-- des indicateurs de synthese ;
-- un filtre par statut ;
-- une recherche textuelle ;
-- des boutons d'action pour valider ou refuser une depense.
+Les notions abordees sont :
 
-#### Competences mobilisees
+- le fonctionnement d'une base de donnees relationnelle ;
+- la creation de tables ;
+- les premieres requetes SQL ;
+- la modelisation simple des donnees ;
+- les formats de donnees, les collections et JSON.
 
-- creation de composants React ;
-- gestion d'etat avec `useState` ;
-- calcul de donnees avec `useMemo` ;
-- appels API avec `fetch` ;
-- gestion des erreurs ;
-- organisation d'une interface responsive.
+Ces apprentissages sont directement utiles dans mon parcours oriente vers le developpement et la data.
 
-#### Resultat obtenu
+### Methodes de travail
 
-L'utilisateur dispose d'une interface fonctionnelle pour suivre les depenses et interagir avec l'API backend.
+La premiere annee permet aussi d'apprendre a :
 
-### 3.3 Exemple 2 - Integration avec l'API backend
+- utiliser Git pour versionner son travail ;
+- documenter son code ;
+- organiser un projet ;
+- travailler en equipe ;
+- communiquer sur l'avancement d'une tache.
 
-#### Contexte
+### Projet ou preuve a ajouter
 
-L'interface frontend doit communiquer avec le backend pour charger les depenses, creer une nouvelle depense et envoyer une decision de validation ou de refus.
+Cette section sera completee avec un projet ou un exercice representatif de la premiere annee :
 
-#### Travail realise
+- nom du projet ;
+- contexte ;
+- travail personnel realise ;
+- technologies utilisees ;
+- difficultes rencontrees ;
+- resultat obtenu ;
+- capture ou lien GitHub.
 
-J'ai connecte le frontend aux endpoints suivants :
+## 5. Deuxieme annee - Developpement d'applications completes
 
-- `GET /expenses` pour charger les depenses ;
-- `POST /expenses` pour creer une depense ;
-- `PATCH /expenses/{id}/approve` pour valider une depense ;
-- `PATCH /expenses/{id}/reject` pour refuser une depense.
+La deuxieme annee approfondit le developpement frontend et backend. Elle permet de passer d'exercices simples a des applications plus completes.
 
-L'URL de l'API est configurable avec la variable `VITE_API_URL`, ce qui permet d'adapter l'application entre l'environnement local et un futur environnement de deploiement.
+### Frontend moderne
 
-#### Competences mobilisees
+Les enseignements portent sur :
 
-- consommation d'une API REST ;
-- traitement des reponses JSON ;
-- affichage conditionnel selon les erreurs ;
-- mise a jour de l'interface apres une action utilisateur.
+- JavaScript moderne ;
+- les interfaces dynamiques ;
+- l'utilisation d'un framework comme React ou Vue ;
+- les bonnes pratiques UI et UX ;
+- les interfaces responsives et professionnelles.
 
-### 3.4 Exemple 3 - Interface de connexion et adaptation aux roles
+Je developpe ainsi ma capacite a creer des interfaces interactives et a organiser une application avec des composants.
 
-#### Contexte
+### Backend et API
 
-Les utilisateurs de FinSmart n'ont pas tous les memes responsabilites. Le gerant PME, le comptable et l'administrateur doivent disposer d'une interface adaptee a leur role.
+Les notions abordees comprennent :
 
-#### Travail realise
+- le developpement d'API robustes ;
+- Python avec FastAPI ou PHP avec Symfony ;
+- les architectures web et le modele MVC ;
+- la mise en place de regles metier ;
+- la validation des donnees ;
+- la gestion des erreurs.
 
-J'ai ajoute :
+Cette partie me permet de comprendre les echanges entre le frontend, le backend et la base de donnees.
 
-- une page de connexion ;
-- trois profils de demonstration ;
-- un affichage adapte au role connecte ;
-- une deconnexion ;
-- l'envoi de l'identite utilisateur au backend pour controler les actions autorisees.
+### Bases de donnees avancees
 
-#### Competences mobilisees
+La deuxieme annee comprend :
 
-- gestion d'un formulaire de connexion ;
-- gestion de l'etat utilisateur ;
-- affichage conditionnel ;
-- integration avec une API ;
-- prise en compte des autorisations.
+- les jointures SQL ;
+- les index et les performances ;
+- l'utilisation d'un ORM ;
+- la gestion des modeles et des migrations ;
+- une introduction a NoSQL avec MongoDB.
 
-### 3.5 Bilan du bloc 1
+Je peux ainsi concevoir une base plus structuree et choisir une methode d'acces aux donnees adaptee.
 
-Le bloc 1 est couvert pour le niveau prototype par la partie frontend de FinSmart Pro et par les composants metier exposes par l'API. L'application contient une interface exploitable, connectee au backend, avec des formulaires, des listes, des filtres et des actions controlees selon le role.
+### Gestion de projet et professionnalisation
 
-Les ameliorations prevues sont :
+Les competences travaillees sont :
 
-- renforcer le responsive mobile ;
-- ameliorer les messages d'erreur ;
-- ajouter des tests frontend automatises ;
-- renforcer l'accessibilite de l'interface.
+- conception d'une application de A a Z ;
+- utilisation de methodes Agile ;
+- suivi des taches avec Git ou GitLab ;
+- documentation technique ;
+- presentation et deploiement d'une application ;
+- preparation a l'integration en entreprise.
 
-## 4. Bloc 2 - Concevoir et developper une application securisee organisee en couches
+### Projet ou preuve a ajouter
 
-### 4.1 Objectif de l'activite
+Cette section sera completee avec un projet de deuxieme annee :
 
-L'objectif de cette activite est de construire la partie serveur de l'application : API, regles metier, persistance des donnees, tests et securisation.
+- nom du projet ;
+- besoin traite ;
+- fonctionnalites developpees personnellement ;
+- conception realisee ;
+- tests effectues ;
+- technologies utilisees ;
+- bilan personnel.
 
-Dans FinSmart Pro, l'activite type 2 demarre avec la fonctionnalite de gestion des depenses.
+## 6. Troisieme annee - Expertise et professionnalisation
 
-### 4.2 Exemple 1 - Creation de l'API depenses
+La troisieme annee vise a produire des applications plus structurees, securisees, performantes et maintenables. Elle permet egalement de renforcer l'experience en entreprise.
 
-#### Contexte
+### Frontend avance
 
-Le backend doit permettre de creer, consulter, valider et refuser une depense.
+Les notions du programme comprennent :
 
-#### Travail realise
+- les interfaces avancees et performantes ;
+- le state management ;
+- les composants reutilisables ;
+- l'optimisation des performances web ;
+- l'organisation d'une application frontend complexe.
 
-J'ai developpe une API avec FastAPI. Les routes principales sont :
+### Backend avance et securite
 
-- `POST /expenses` ;
-- `GET /expenses` ;
-- `GET /expenses/{expense_id}` ;
-- `PATCH /expenses/{expense_id}/approve` ;
-- `PATCH /expenses/{expense_id}/reject`.
+Les competences travaillees sont :
 
-#### Competences mobilisees
+- la conception d'une API modulaire et scalable ;
+- la securite avancee ;
+- l'integration de services externes ;
+- la production d'un code structure et maintenable ;
+- les tests unitaires et les tests d'integration.
 
-- creation d'endpoints REST ;
-- validation des donnees avec Pydantic ;
-- separation entre schemas, modeles et logique applicative ;
-- gestion des erreurs HTTP ;
-- structuration d'une API documentee avec Swagger.
+### Bases de donnees et analyse de donnees
 
-### 4.3 Exemple 2 - Modelisation et persistance des donnees
+La troisieme annee aborde :
 
-#### Contexte
+- l'optimisation SQL et NoSQL ;
+- les schemas adaptes aux volumes importants ;
+- les transactions, les contraintes et les triggers ;
+- l'exploration de donnees avec Python et Pandas.
 
-Les depenses doivent etre stockees en base de donnees afin d'etre consultees et traitees par les utilisateurs.
+Cette partie correspond particulierement a mon objectif de rapprocher le developpement d'applications et l'analyse de donnees.
 
-#### Travail realise
+### Deploiement et qualite
 
-J'ai demarre la modelisation des donnees avec les entites suivantes :
+La formation permet egalement de travailler sur :
 
-- `utilisateur` ;
-- `pme` ;
-- `depense` ;
-- `categorie` ;
-- `validation`.
+- Docker ;
+- l'integration et le deploiement continus ;
+- les tests ;
+- la qualite du code ;
+- la documentation ;
+- la preparation d'une application pour un environnement professionnel.
 
-Les diagrammes MCD, MLD et MPD permettent de justifier la structure de la base et les relations entre les tables.
+### Professionnalisation
 
-#### Competences mobilisees
+La troisieme annee inclut :
 
-- conception d'une base relationnelle ;
-- definition de cles primaires et etrangeres ;
-- utilisation de SQLAlchemy ;
-- preparation d'une base PostgreSQL ;
-- respect des contraintes metier.
+- la realisation d'un projet avec des contraintes reelles ;
+- la gestion des delais et des specifications ;
+- la preparation du portfolio ;
+- la presentation orale ;
+- le pitch professionnel ;
+- la preparation aux entretiens techniques.
 
-### 4.4 Exemple 3 - Regles metier de validation
+### Projet ou preuve a ajouter
 
-#### Contexte
+Cette section sera completee avec le projet principal de certification :
 
-Une depense doit etre validee ou refusee par un comptable. Une fois traitee, elle ne doit plus pouvoir etre modifiee au niveau de sa decision.
+- contexte professionnel ;
+- expression du besoin ;
+- conception ;
+- travail personnel ;
+- developpement ;
+- securite ;
+- tests ;
+- deploiement ;
+- resultats ;
+- preuves et annexes.
 
-#### Travail realise
+## 7. Mon experience professionnelle
 
-J'ai mis en place les regles suivantes :
+### Data Steward / Data Analyst freelance - Veeva
 
-- une depense est creee avec un statut en attente ;
-- une depense en attente peut etre validee ;
-- une depense en attente peut etre refusee ;
-- une depense deja validee ou refusee ne peut plus recevoir une seconde decision.
+Depuis janvier 2026, je travaille en freelance chez Veeva dans un role de Data Steward / Data Analyst.
 
-#### Competences mobilisees
+Cette experience me permet notamment de developper :
 
-- implementation de regles metier ;
-- controle de l'etat d'un objet ;
-- retour d'erreurs explicites ;
-- verification avec tests unitaires.
+- la rigueur dans le traitement des donnees ;
+- le controle de la qualite des informations ;
+- l'analyse et la verification des donnees ;
+- le respect de procedures ;
+- l'autonomie dans l'organisation du travail ;
+- la communication dans un contexte professionnel ;
+- la gestion des priorites.
 
-### 4.5 Exemple 4 - Authentification et protection des roles
+Je completerai cette section ulterieurement avec des exemples qui peuvent etre presentes sans divulguer d'informations confidentielles.
 
-#### Contexte
+### Situation professionnelle a ajouter
 
-Certaines actions doivent etre reservees a un profil precis. Par exemple, un gerant PME peut creer une depense, tandis qu'un comptable peut la valider ou la refuser.
+Pour chaque situation choisie, je preciserai :
 
-#### Travail realise
+- le contexte ;
+- l'objectif de la mission ;
+- les taches realisees personnellement ;
+- les outils utilises ;
+- les controles effectues ;
+- les difficultes rencontrees ;
+- les competences developpees ;
+- le resultat obtenu.
 
-J'ai ajoute :
+## 8. Mes competences techniques
 
-- l'endpoint `POST /auth/login` ;
-- la verification des comptes de demonstration ;
-- les roles `admin`, `gerant_pme` et `comptable` ;
-- une protection minimale des routes sensibles ;
-- des erreurs HTTP `401` et `403` ;
-- des tests sur la connexion et les autorisations.
+### Developpement frontend
 
-Cette authentification reste une version de demonstration. Une version de production devra utiliser des mots de passe haches et un token ou une session securisee.
+- HTML ;
+- CSS ;
+- JavaScript ;
+- React ;
+- interfaces responsives ;
+- consommation d'API REST.
 
-#### Competences mobilisees
+### Developpement backend
 
-- conception d'une authentification ;
-- controle des autorisations ;
-- securisation progressive d'une API ;
-- gestion des erreurs HTTP ;
-- ecriture de tests associes.
+- Python ;
+- FastAPI ;
+- programmation orientee objet ;
+- creation d'API REST ;
+- validation des donnees ;
+- gestion des erreurs et des regles metier.
 
-### 4.6 Exemple 5 - Facturation de base
+### Bases de donnees et data
 
-#### Contexte
+- SQL ;
+- PostgreSQL ;
+- modelisation relationnelle ;
+- SQLAlchemy et ORM ;
+- JSON ;
+- notions NoSQL et MongoDB ;
+- analyse de donnees ;
+- Python et Pandas.
 
-Les PME doivent pouvoir enregistrer et suivre leurs factures clients.
+### Outils et qualite
 
-#### Travail realise
+- Git et GitHub ;
+- Docker et Docker Compose ;
+- Pytest ;
+- Ruff ;
+- ESLint ;
+- GitHub Actions ;
+- documentation technique ;
+- methodes Agile.
 
-J'ai developpe :
+## 9. Mes competences professionnelles
 
-- le modele de donnees `Invoice` ;
-- la creation et la consultation des factures ;
-- le filtrage par statut ;
-- les statuts brouillon, envoyee, payee et en retard ;
-- une interface React de saisie et de consultation ;
-- des tests API sur la facturation.
+Au cours de ma formation et de mon experience, je developpe egalement les competences suivantes :
 
-#### Competences mobilisees
+- analyser un besoin ;
+- organiser mon travail ;
+- respecter des consignes et des delais ;
+- rechercher une solution technique ;
+- documenter une realisation ;
+- communiquer sur l'avancement ;
+- travailler de maniere autonome ;
+- controler la qualite d'un resultat ;
+- presenter mes choix a l'oral ;
+- prendre en compte la securite et la confidentialite.
 
-- evolution d'un modele relationnel ;
-- creation d'endpoints REST ;
-- validation des montants ;
-- connexion entre frontend, API et base de donnees ;
-- tests fonctionnels backend.
+## 10. Correspondance avec le titre RNCP37873
 
-### 4.7 Bilan du bloc 2
+### Bloc 1 - Developper une application securisee
 
-Le bloc 2 est couvert par l'analyse du besoin, l'architecture en couches, la conception de la base relationnelle, le developpement de l'API et l'implementation des regles metier.
+Les enseignements associes concernent les interfaces utilisateur, la programmation frontend et backend, les composants metier, Git et la gestion de projet.
 
-Les prochaines etapes sont :
+### Bloc 2 - Concevoir et developper une application securisee organisee en couches
 
-- renforcer l'authentification avec un token ou une session ;
-- finaliser le modele avec les futures fonctionnalites de reporting ;
-- enrichir les tests backend ;
-- documenter davantage les choix de securite.
+Les enseignements associes concernent l'analyse du besoin, l'architecture, les API, la programmation orientee objet, SQL, NoSQL, les ORM et la modelisation des donnees.
 
-## 5. Bloc 3 - Preparer le deploiement d'une application securisee
+### Bloc 3 - Preparer le deploiement d'une application securisee
 
-### 5.1 Exemple 1 - Tests et controle qualite
+Les enseignements associes concernent les tests, Docker, la qualite du code, l'integration continue, le deploiement et la documentation.
 
-#### Travail realise
+Les projets et situations professionnelles permettant de prouver chaque competence seront ajoutes progressivement.
 
-J'ai ajoute des tests Pytest pour verifier les depenses, les utilisateurs, les categories, l'authentification, les roles et les factures.
+## 11. Mon projet professionnel
 
-Les controles utilises sont :
+Mon objectif est de continuer a progresser dans les metiers du developpement et de la data. Je souhaite utiliser mes competences techniques pour concevoir des applications utiles, fiables et structurees, tout en valorisant mon experience dans la gestion et l'analyse de donnees.
 
-```powershell
-pytest
-ruff check .
-cd frontend
-npm run lint
-npm run build
-```
+Le Bachelor Concepteur Developpeur d'Applications me permet de renforcer mes connaissances en programmation, architecture logicielle, bases de donnees, tests et deploiement. Mon experience chez Veeva complete cette formation par une pratique professionnelle liee a la qualite et a l'analyse des donnees.
 
-Au terme du Sprint 2, 12 tests backend passent.
+## 12. Elements a completer
 
-### 5.2 Exemple 2 - Conteneurisation
+Le dossier sera enrichi progressivement avec :
 
-J'ai utilise Docker et Docker Compose pour executer :
+- les dates exactes de chaque annee de formation ;
+- le campus frequente ;
+- les projets realises pendant les trois annees ;
+- les situations professionnelles choisies chez Veeva ;
+- les captures d'ecran ;
+- les liens GitHub ;
+- les attestations ou preuves autorisees ;
+- un CV actualise ;
+- une conclusion personnelle definitive.
 
-- l'API FastAPI ;
-- la base PostgreSQL ;
-- la configuration locale et la preparation du staging.
+## 13. Conclusion provisoire
 
-Cette configuration facilite l'installation du projet sur un autre poste et limite les differences entre les environnements.
+Mon parcours combine une formation en conception et developpement d'applications avec une experience professionnelle dans le domaine de la data. Les trois annees a Ecole IT me permettent de progresser des fondamentaux du developpement vers la conception d'applications completes, securisees et deployables.
 
-### 5.3 Exemple 3 - Integration continue
-
-Une integration continue GitHub Actions controle automatiquement :
-
-- le lint backend ;
-- les tests backend ;
-- le lint frontend ;
-- le build React.
-
-### 5.4 Bilan du bloc 3
-
-Le deploiement est prepare avec Docker, Docker Compose, GitHub Actions et une documentation de staging. Le deploiement public final et la gestion complete des secrets restent a finaliser.
-
-## 6. Outils et environnement
-
-| Besoin | Outil utilise |
-| --- | --- |
-| Gestion de code | Git, GitHub |
-| Suivi des taches | GitHub Issues |
-| Frontend | React, Vite |
-| Backend | FastAPI |
-| Base de donnees | PostgreSQL |
-| Tests backend | Pytest |
-| Qualite code | Ruff, ESLint |
-| Conteneurisation | Docker, Docker Compose |
-| CI | GitHub Actions |
-
-## 7. Difficultes rencontrees
-
-Les principales difficultes rencontrees pendant le projet sont :
-
-- connexion entre React et FastAPI ;
-- configuration de PostgreSQL avec Docker ;
-- conflit de port Docker avec une autre application ;
-- mise en place des roles et des autorisations ;
-- synchronisation du repository GitHub ;
-- ajout progressif des tests associes.
-
-Ces difficultes ont ete traitees par la consultation des logs, les tests locaux, la documentation technique et le decoupage des corrections en commits.
-
-## 8. Tableau de correspondance RNCP
-
-| Bloc | Realisations presentees | Niveau actuel |
-| --- | --- | --- |
-| BC01 - Developper une application securisee | Interfaces React, composants metier, connexion API, gestion de projet GitHub | Couvert pour le prototype |
-| BC02 - Concevoir une application en couches | Analyse, UML, FastAPI, SQLAlchemy, PostgreSQL, roles et facturation | Couvert |
-| BC03 - Preparer le deploiement | Pytest, Ruff, ESLint, build Vite, Docker et GitHub Actions | Couvert, deploiement public a finaliser |
-
-## 9. Pieces justificatives a ajouter
-
-Les preuves suivantes pourront etre inserees progressivement dans le dossier final :
-
-- capture de la page de connexion ;
-- capture de la gestion des depenses ;
-- capture de la facturation ;
-- capture de Swagger ;
-- resultat des 12 tests Pytest ;
-- pipeline GitHub Actions ;
-- backlog GitHub ;
-- diagrammes UML et base de donnees.
-
-## 10. Bilan provisoire
-
-Le dossier professionnel est maintenant organise selon les trois blocs du titre RNCP37873.
-
-Le projet FinSmart Pro fournit des situations concretes pour expliquer le travail realise sur le frontend, le backend, la base de donnees, la securite, les tests et le deploiement. Mon experience de Data Steward / Data Analyst chez Veeva sera detaillee ulterieurement afin d'ajouter d'autres exemples professionnels lies aux donnees.
+Je completerai ce dossier avec mes projets et mes situations professionnelles afin d'apporter des preuves concretes pour chaque bloc de competences du titre RNCP37873.
