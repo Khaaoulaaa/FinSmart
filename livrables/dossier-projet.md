@@ -1,5 +1,19 @@
 # Dossier projet - FinSmart Pro
 
+## Cadre de certification
+
+Ce dossier projet est prepare dans le cadre du titre professionnel **Concepteur developpeur d'applications**, niveau 6, enregistre sous le code **RNCP37873**.
+
+Reference officielle : [France competences - RNCP37873](https://www.francecompetences.fr/recherche/rncp/37873/).
+
+Le titre est organise en trois blocs de competences :
+
+- `RNCP37873BC01` : developper une application securisee ;
+- `RNCP37873BC02` : concevoir et developper une application securisee organisee en couches ;
+- `RNCP37873BC03` : preparer le deploiement d'une application securisee.
+
+Le projet FinSmart Pro apporte des preuves pour ces trois blocs. Certaines competences, notamment l'acces NoSQL et l'authentification de niveau production, ne sont pas encore totalement couvertes et sont identifiees comme des axes d'amelioration.
+
 ## 1. Introduction
 
 FinSmart Pro est un projet d'application SaaS destinee aux PME. La plateforme a pour objectif de centraliser plusieurs activites financieres dans un outil unique : gestion des depenses, comptabilite, facturation, tresorerie et reporting financier.
@@ -97,6 +111,33 @@ Les statuts utilises sont :
 Le projet est organise avec une demarche agile simplifiee. La backlog est suivie dans les tickets GitHub du repository.
 
 Chaque evolution doit etre traitee avec un commit atomique : une fonctionnalite, une correction ou une mise a jour documentaire par commit.
+
+### Organisation du travail
+
+Le travail est decoupe en sprints avec :
+
+- un objectif de sprint ;
+- une backlog priorisee ;
+- des tickets GitHub ;
+- des commits atomiques ;
+- des tests associes aux fonctionnalites ;
+- un bilan de sprint.
+
+### Correspondance avec les competences RNCP
+
+| Bloc RNCP | Competence attendue | Realisation FinSmart | Preuve |
+| --- | --- | --- | --- |
+| BC01 | Installer et configurer l'environnement | Environnement Python, Node.js, Docker et PostgreSQL | `requirements.txt`, `frontend/package.json`, `docker-compose.yml` |
+| BC01 | Developper des interfaces utilisateur | Connexion, depenses, facturation et navigation React | `frontend/src/App.jsx`, `frontend/src/styles.css` |
+| BC01 | Developper des composants metier | Creation, validation et refus des depenses ; creation des factures | `main.py`, `models.py`, `schemas.py` |
+| BC01 | Contribuer a la gestion du projet | Backlog, issues GitHub, sprints et commits atomiques | `livrables/backlog.md`, GitHub Issues |
+| BC02 | Analyser les besoins et maquetter | Acteurs, parcours, perimetre fonctionnel et interfaces | Sections 2 a 7 du dossier |
+| BC02 | Definir l'architecture logicielle | Architecture React, FastAPI, SQLAlchemy et PostgreSQL | Section 8 et diagrammes |
+| BC02 | Concevoir une base relationnelle | Modeles PME, utilisateurs, depenses et factures | `models.py`, MCD, MLD et MPD |
+| BC02 | Developper l'acces aux donnees | Endpoints REST et requetes SQLAlchemy | `main.py`, `database.py` |
+| BC03 | Preparer et executer les tests | Tests Pytest, Ruff, ESLint et build Vite | `tests/`, commandes de qualite |
+| BC03 | Preparer le deploiement | Dockerfile, Docker Compose et documentation staging | `Dockerfile`, `docker-compose.staging.yml`, `docs/deploiement-staging.md` |
+| BC03 | Contribuer a une demarche DevOps | Integration continue avec GitHub Actions | `.github/workflows/ci.yml` |
 
 ## 10. Demarrage de la conception
 
@@ -364,8 +405,161 @@ Pendant le Sprint 2, le projet a evolue au-dela de la simple gestion des depense
 
 La securisation complete avec token, session et hash reel des mots de passe est identifiee comme une evolution de Sprint 3 ou de durcissement technique.
 
-## 19. Conclusion provisoire
+## 19. Architecture applicative en couches
 
-Le dossier projet contient maintenant la fin du contexte, le demarrage de la conception et l'avancement du Sprint 2. Les diagrammes existants permettent de justifier la structure de la base de donnees et les premiers flux fonctionnels.
+FinSmart Pro utilise une architecture web organisee en couches :
 
-La suite du travail consiste a finaliser les diagrammes avec la facturation, renforcer l'authentification et demarrer le reporting financier du Sprint 3.
+| Couche | Responsabilite | Technologie |
+| --- | --- | --- |
+| Presentation | Affichage des vues et interactions utilisateur | React, Vite, CSS |
+| API | Exposition des routes HTTP et controle des entrees | FastAPI, Pydantic |
+| Metier | Regles de creation, validation, refus et controle des roles | Python |
+| Acces aux donnees | Requetes et persistance des objets | SQLAlchemy |
+| Donnees | Stockage relationnel | PostgreSQL |
+| Infrastructure | Execution locale, staging et integration continue | Docker, Docker Compose, GitHub Actions |
+
+Cette separation facilite la maintenance, les tests et les evolutions futures. Le frontend ne communique pas directement avec PostgreSQL : il passe par l'API FastAPI.
+
+## 20. Developpements realises
+
+### Gestion des depenses
+
+- creation et consultation des depenses ;
+- filtrage par statut ;
+- validation ou refus par un profil autorise ;
+- controle d'une depense deja traitee ;
+- categories chargees depuis l'API.
+
+### Gestion des utilisateurs et des roles
+
+- utilisateurs de demonstration en base ;
+- roles `admin`, `gerant_pme` et `comptable` ;
+- endpoint de connexion demo ;
+- protection minimale des actions sensibles selon le role.
+
+### Facturation
+
+- creation et consultation des factures ;
+- statuts brouillon, envoyee, payee et en retard ;
+- filtrage par statut ;
+- calcul et affichage du total TTC cote interface.
+
+## 21. Securite de l'application
+
+La securite est prise en compte progressivement :
+
+- validation des donnees d'entree avec Pydantic ;
+- controle des montants positifs ;
+- controle des roles pour les actions sensibles ;
+- refus des identifiants invalides ;
+- limitation des origines CORS au frontend local ;
+- variables d'environnement pour la connexion a la base ;
+- absence de mot de passe en clair dans les reponses API.
+
+### Limites actuelles
+
+L'authentification utilise encore un mecanisme de demonstration avec le header `X-User-Email`. Cette solution permet de tester les roles, mais elle n'est pas adaptee a la production.
+
+Les ameliorations prevues sont :
+
+- hash reel des mots de passe avec une bibliotheque adaptee ;
+- token signe ou session securisee ;
+- expiration et renouvellement de session ;
+- protection de toutes les routes privees ;
+- journalisation des actions sensibles ;
+- gestion securisee des secrets de production.
+
+## 22. Strategie de tests
+
+Les tests sont ajoutes en parallele des developpements. Ils utilisent une base SQLite en memoire afin d'isoler les scenarios.
+
+| Fonctionnalite | Verification |
+| --- | --- |
+| Depenses | Creation, validation et blocage d'une seconde decision |
+| Utilisateurs | Filtrage par role |
+| Authentification | Connexion valide et rejet d'un mauvais mot de passe |
+| Autorisations | Refus de creation d'une facture pour un role non autorise |
+| Categories | Presence des categories et compteur d'utilisation |
+| Facturation | Creation, filtrage par statut et refus d'un montant negatif |
+
+Commandes de verification :
+
+```powershell
+pytest
+ruff check .
+cd frontend
+npm run lint
+npm run build
+```
+
+Au terme du Sprint 2, la suite comprend 12 tests backend. Les tests frontend automatises restent a ajouter.
+
+## 23. Deploiement et demarche DevOps
+
+Le projet comprend :
+
+- un `Dockerfile` pour construire l'image de l'API ;
+- un `docker-compose.yml` pour l'API et PostgreSQL ;
+- un `docker-compose.staging.yml` pour preparer un environnement de staging ;
+- un pipeline GitHub Actions pour executer les controles backend et frontend ;
+- une documentation de deploiement dans `docs/deploiement-staging.md`.
+
+Le deploiement public final reste a stabiliser. Le lien de production devra etre ajoute au README lorsque l'environnement sera valide.
+
+## 24. Qualite, accessibilite et eco-conception
+
+### Qualite
+
+- conventions de code verifiees avec Ruff et ESLint ;
+- composants et fonctions nommes selon leur responsabilite ;
+- commits decoupes par fonctionnalite ou documentation ;
+- documentation technique conservee dans le repository.
+
+### Accessibilite
+
+L'interface utilise des labels de formulaire, des boutons natifs, des titres hierarchises et des attributs ARIA sur certaines zones. Les prochaines verifications devront porter sur :
+
+- la navigation complete au clavier ;
+- le contraste des couleurs ;
+- les messages d'erreur annonces aux technologies d'assistance ;
+- le comportement responsive avec zoom.
+
+### Eco-conception
+
+Les choix actuels limitent la complexite du prototype : interface sans animation lourde, appels API simples et dependances frontend limitees. Les prochaines actions seront de mesurer le poids des ressources, reduire les appels inutiles et optimiser les images.
+
+## 25. Protection des donnees
+
+FinSmart manipule des donnees financieres et des informations d'utilisateur. Dans un contexte reel, les principes suivants devront etre appliques :
+
+- minimisation des donnees collectees ;
+- information des utilisateurs ;
+- limitation de la duree de conservation ;
+- controle des acces selon le role ;
+- sauvegarde et restauration de la base ;
+- droit d'acces, de rectification et de suppression ;
+- journalisation sans exposition de donnees sensibles.
+
+Les donnees presentes dans le projet sont des donnees fictives de demonstration.
+
+## 26. Bilan des competences et axes a completer
+
+| Competence | Niveau de couverture |
+| --- | --- |
+| Developpement frontend securise | Couvert pour le prototype |
+| Developpement backend et composants metier | Couvert |
+| Architecture applicative en couches | Couvert |
+| Base de donnees relationnelle | Couvert |
+| Acces aux donnees SQL | Couvert |
+| Acces a une base NoSQL | Non couvert par FinSmart |
+| Tests backend | Couvert |
+| Tests frontend automatises | A completer |
+| Deploiement conteneurise | Prepare et documente |
+| Authentification de production | A completer |
+| Demarche DevOps | Couvert par la CI |
+
+## 27. Conclusion provisoire
+
+Le dossier projet couvre maintenant le contexte, l'analyse du besoin, la conception, l'architecture en couches, les developpements, la securite, les tests et la preparation du deploiement. Il met egalement en correspondance les realisations FinSmart avec les trois blocs du titre RNCP37873.
+
+La suite du travail consiste a produire les preuves visuelles, finaliser les diagrammes avec la facturation, renforcer l'authentification et developper le dashboard financier du Sprint 3.
