@@ -24,7 +24,6 @@ Depuis janvier 2026, je travaille egalement en freelance comme Data Steward / Da
 
 Le Bachelor Concepteur Developpeur d'Applications d'Ecole IT se deroule sur trois ans. La progression commence par les fondamentaux du developpement, puis aborde les frameworks, les API et les bases de donnees avancees avant de traiter l'architecture, la securite et la performance des applications.
 
-Source du programme : [Ecole IT - Bachelor Developpeur d'Applications](https://ecole-it.com/formations/bachelor-developpeur-dapplications-cda/).
 
 ## 4. Premiere annee - Acquisition des fondamentaux
 
@@ -339,9 +338,7 @@ Le Bachelor Concepteur Developpeur d'Applications me permet de renforcer mes con
 Le dossier sera enrichi progressivement avec :
 
 - les dates exactes de chaque annee de formation ;
-- le campus frequente ;
 - les projets realises pendant les trois annees ;
-- les situations professionnelles choisies chez Veeva ;
 - les captures d'ecran ;
 - les liens GitHub ;
 - les attestations ou preuves autorisees ;
